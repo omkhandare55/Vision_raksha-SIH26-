@@ -1,0 +1,25 @@
+/* src/index.css — Global styles + Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand: #1d4ed8;
+  --brand-light: #eff6ff;
+}
+
+body {
+  @apply bg-gray-50 text-gray-800 font-sans;
+}
+
+/* Grade badge colors */
+.grade-0 { @apply bg-green-100 text-green-800 border-green-300; }
+.grade-1 { @apply bg-yellow-100 text-yellow-800 border-yellow-300; }
+.grade-2 { @apply bg-orange-100 text-orange-800 border-orange-300; }
+.grade-3 { @apply bg-red-100 text-red-800 border-red-300; }
+.grade-4 { @apply bg-red-900 text-white border-red-700; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { @apply bg-gray-100; }
+::-webkit-scrollbar-thumb { @apply bg-gray-400 rounded-full; }

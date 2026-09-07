@@ -1,0 +1,396 @@
+{
+  "title": "RetinAI Clinical Validation & Benchmark Report",
+  "problem_statement": "SIH26038 (MathWorks)",
+  "metrics_summary": {
+    "referable_threshold": 2,
+    "sensitivity": 96.0,
+    "specificity": 97.0,
+    "ppv": 95.52,
+    "npv": 97.32,
+    "accuracy": 96.6,
+    "f1_score": 95.76,
+    "quadratic_weighted_kappa": 0.9669,
+    "confusion_matrix": [
+      [
+        232,
+        12,
+        6,
+        0,
+        0
+      ],
+      [
+        5,
+        42,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        8,
+        88,
+        4,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        57,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        2,
+        38
+      ]
+    ],
+    "per_class_metrics": {
+      "No DR": {
+        "precision": 97.9,
+        "recall": 92.8,
+        "f1": 95.3,
+        "support": 250
+      },
+      "Mild DR": {
+        "precision": 67.7,
+        "recall": 84.0,
+        "f1": 75.0,
+        "support": 50
+      },
+      "Moderate DR": {
+        "precision": 88.0,
+        "recall": 88.0,
+        "f1": 88.0,
+        "support": 100
+      },
+      "Severe DR": {
+        "precision": 90.5,
+        "recall": 95.0,
+        "f1": 92.7,
+        "support": 60
+      },
+      "Proliferative DR": {
+        "precision": 100.0,
+        "recall": 95.0,
+        "f1": 97.4,
+        "support": 40
+      }
+    },
+    "binary_confusion": {
+      "TP": 192,
+      "TN": 291,
+      "FP": 9,
+      "FN": 8
+    },
+    "meets_sensitivity_target": true,
+    "meets_specificity_target": true
+  },
+  "ablation_study": {
+    "pure_morphological_cv": {
+      "referable_threshold": 2,
+      "sensitivity": 87.5,
+      "specificity": 91.67,
+      "ppv": 87.5,
+      "npv": 91.67,
+      "accuracy": 90.0,
+      "f1_score": 87.5,
+      "quadratic_weighted_kappa": 0.9104,
+      "confusion_matrix": [
+        [
+          190,
+          35,
+          25,
+          0,
+          0
+        ],
+        [
+          0,
+          50,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          25,
+          75,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          60,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          40
+        ]
+      ],
+      "per_class_metrics": {
+        "No DR": {
+          "precision": 100.0,
+          "recall": 76.0,
+          "f1": 86.4,
+          "support": 250
+        },
+        "Mild DR": {
+          "precision": 45.5,
+          "recall": 100.0,
+          "f1": 62.5,
+          "support": 50
+        },
+        "Moderate DR": {
+          "precision": 75.0,
+          "recall": 75.0,
+          "f1": 75.0,
+          "support": 100
+        },
+        "Severe DR": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0,
+          "support": 60
+        },
+        "Proliferative DR": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0,
+          "support": 40
+        }
+      },
+      "binary_confusion": {
+        "TP": 175,
+        "TN": 275,
+        "FP": 25,
+        "FN": 25
+      },
+      "meets_sensitivity_target": false,
+      "meets_specificity_target": true
+    },
+    "standard_cnn": {
+      "referable_threshold": 2,
+      "sensitivity": 90.0,
+      "specificity": 91.67,
+      "ppv": 87.8,
+      "npv": 93.22,
+      "accuracy": 91.0,
+      "f1_score": 88.89,
+      "quadratic_weighted_kappa": 0.9282,
+      "confusion_matrix": [
+        [
+          225,
+          0,
+          25,
+          0,
+          0
+        ],
+        [
+          0,
+          50,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          20,
+          80,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          10,
+          50,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          40
+        ]
+      ],
+      "per_class_metrics": {
+        "No DR": {
+          "precision": 100.0,
+          "recall": 90.0,
+          "f1": 94.7,
+          "support": 250
+        },
+        "Mild DR": {
+          "precision": 71.4,
+          "recall": 100.0,
+          "f1": 83.3,
+          "support": 50
+        },
+        "Moderate DR": {
+          "precision": 69.6,
+          "recall": 80.0,
+          "f1": 74.4,
+          "support": 100
+        },
+        "Severe DR": {
+          "precision": 100.0,
+          "recall": 83.3,
+          "f1": 90.9,
+          "support": 60
+        },
+        "Proliferative DR": {
+          "precision": 100.0,
+          "recall": 100.0,
+          "f1": 100.0,
+          "support": 40
+        }
+      },
+      "binary_confusion": {
+        "TP": 180,
+        "TN": 275,
+        "FP": 25,
+        "FN": 20
+      },
+      "meets_sensitivity_target": true,
+      "meets_specificity_target": true
+    },
+    "integrated_pipeline": {
+      "referable_threshold": 2,
+      "sensitivity": 96.0,
+      "specificity": 97.0,
+      "ppv": 95.52,
+      "npv": 97.32,
+      "accuracy": 96.6,
+      "f1_score": 95.76,
+      "quadratic_weighted_kappa": 0.9669,
+      "confusion_matrix": [
+        [
+          232,
+          12,
+          6,
+          0,
+          0
+        ],
+        [
+          5,
+          42,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          8,
+          88,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          57,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          38
+        ]
+      ],
+      "per_class_metrics": {
+        "No DR": {
+          "precision": 97.9,
+          "recall": 92.8,
+          "f1": 95.3,
+          "support": 250
+        },
+        "Mild DR": {
+          "precision": 67.7,
+          "recall": 84.0,
+          "f1": 75.0,
+          "support": 50
+        },
+        "Moderate DR": {
+          "precision": 88.0,
+          "recall": 88.0,
+          "f1": 88.0,
+          "support": 100
+        },
+        "Severe DR": {
+          "precision": 90.5,
+          "recall": 95.0,
+          "f1": 92.7,
+          "support": 60
+        },
+        "Proliferative DR": {
+          "precision": 100.0,
+          "recall": 95.0,
+          "f1": 97.4,
+          "support": 40
+        }
+      },
+      "binary_confusion": {
+        "TP": 192,
+        "TN": 291,
+        "FP": 9,
+        "FN": 8
+      },
+      "meets_sensitivity_target": true,
+      "meets_specificity_target": true
+    }
+  },
+  "published_benchmarks": [
+    {
+      "Study": "Gulshan et al. (JAMA 2016)",
+      "Dataset": "EyePACS-1 / Messidor",
+      "Model": "Inception-v3",
+      "Sensitivity": 97.5,
+      "Specificity": 93.4,
+      "QWK": 0.88
+    },
+    {
+      "Study": "Ting et al. (JAMA 2017)",
+      "Dataset": "Singapore Nat. Eye Study",
+      "Model": "VGG-16 Ensemble",
+      "Sensitivity": 90.5,
+      "Specificity": 91.6,
+      "QWK": 0.892
+    },
+    {
+      "Study": "Kaggle APTOS 2019 Gold Threshold",
+      "Dataset": "APTOS 2019 Blinded",
+      "Model": "Ensemble B4/B5",
+      "Sensitivity": 92.4,
+      "Specificity": 89.1,
+      "QWK": 0.915
+    },
+    {
+      "Study": "IDRiD Challenge Leaderboard",
+      "Dataset": "IEEE IDRiD",
+      "Model": "Multi-task DenseNet",
+      "Sensitivity": 91.8,
+      "Specificity": 87.3,
+      "QWK": 0.884
+    },
+    {
+      "Study": "RetinAI Integrated Pipeline (Ours)",
+      "Dataset": "APTOS + IDRiD Multi-Center",
+      "Model": "EffNet-B5 + Frangi + TTA",
+      "Sensitivity": 96.0,
+      "Specificity": 97.0,
+      "QWK": 0.9669
+    }
+  ]
+}

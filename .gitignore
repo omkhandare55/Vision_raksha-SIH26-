@@ -1,6 +1,7 @@
 # Python & Virtual Environments
 venv/
 .env
+env/
 __pycache__/
 *.py[cod]
 *$py.class
@@ -23,6 +24,10 @@ dr-screening/backend/models/*.pth
 dr-screening/backend/models/*.onnx
 dr-screening/models/*.pth
 dr-screening/models/*.onnx
+
+# Datasets
+datasets/aptos2019/
+datasets/idrid/
 
 # Node / Frontend
 node_modules/

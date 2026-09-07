@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RetinAI — Offline</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #eff6ff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { color: #1d4ed8; font-size: 22px; margin-bottom: 8px; }
+    p  { color: #6b7280; font-size: 14px; line-height: 1.6; }
+    .badge {
+      display: inline-block;
+      margin-top: 20px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .retry {
+      margin-top: 20px;
+      display: block;
+      background: #1d4ed8;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+    .retry:hover { background: #1e40af; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📡</div>
+    <h1>You're Offline</h1>
+    <p>
+      No internet connection detected.<br />
+      Images captured will be saved and automatically
+      synced when you reconnect.
+    </p>
+    <span class="badge">RetinAI · SIH26038</span>
+    <button class="retry" onclick="window.location.reload()">
+      ↺ Try Again
+    </button>
+  </div>
+</body>
+</html>

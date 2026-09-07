@@ -4,7 +4,7 @@ color 0B
 
 echo ======================================================================
 echo           RetinAI - Clinical Screening System Launcher
-echo           Problem Statement: SIH26038 | Team PARSU
+echo           Problem Statement: SIH26038 ^| Team PARSU
 echo ======================================================================
 echo.
 
@@ -38,7 +38,7 @@ if not exist "%MODEL_FILE%" (
     echo.
     echo [WARNING] Model weights file not found at:
     echo   dr-screening\models\best_dr_model.pth
-    echo   (The system will run in HEURISTIC CLINICAL FALLBACK MODE until weights are placed there).
+    echo   ^(The system will run in HEURISTIC CLINICAL FALLBACK MODE until weights are placed there^).
     echo.
 ) else (
     echo [OK] Deep Learning Model Weights found.
@@ -50,7 +50,7 @@ if not exist "%BACKEND_DIR%\venv\Scripts\python.exe" (
     echo [SETUP] Creating Python virtual environment in %BACKEND_DIR%\venv ...
     cd /d "%BACKEND_DIR%"
     python -m venv venv
-    echo [SETUP] Installing Python dependencies (this may take a few minutes)...
+    echo [SETUP] Installing Python dependencies ^(this may take a few minutes^)...
     "%BACKEND_DIR%\venv\Scripts\pip.exe" install -r requirements.txt
     if not exist "%BACKEND_DIR%\.env" (
         copy "%BACKEND_DIR%\.env.example" "%BACKEND_DIR%\.env" >nul

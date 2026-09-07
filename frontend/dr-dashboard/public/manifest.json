@@ -1,0 +1,39 @@
+{
+  "name": "RetinAI — DR Screening",
+  "short_name": "RetinAI",
+  "description": "Explainable AI for Diabetic Retinopathy Screening · SIH26038",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#1d4ed8",
+  "theme_color": "#1d4ed8",
+  "lang": "en",
+  "categories": ["medical", "health", "productivity"],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Screen Patient",
+      "url": "/screen",
+      "description": "Capture and analyse a retinal image"
+    },
+    {
+      "name": "Live Demo",
+      "url": "/demo",
+      "description": "SIH judge demonstration"
+    }
+  ]
+}
