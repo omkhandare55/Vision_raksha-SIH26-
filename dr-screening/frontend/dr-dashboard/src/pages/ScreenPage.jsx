@@ -5,7 +5,7 @@
 // Step 3: Multi-Modal AI Diagnosis & Doctor Triage
 
 import { useState, useEffect } from "react";
-import { Loader2, UserPlus, WifiOff, Clock, ShieldCheck, HeartPulse, Activity, Eye, FileText, ArrowRight, Send, X, ChevronDown, Download } from "lucide-react";
+import { Loader2, UserPlus, WifiOff, Clock, ShieldCheck, HeartPulse, Eye, ArrowRight, Send, X, Download } from "lucide-react";
 import ImageCapture   from "../components/ImageCapture";
 import ResultSection  from "../components/ResultSection";
 import { analyseImage, validateScreening, createPatient, listDoctors, shareReport, getReportUrl } from "../utils/api";
@@ -74,7 +74,7 @@ export default function ScreenPage() {
         diabetic_since: parsedVitals.diabetes_years ? new Date().getFullYear() - parsedVitals.diabetes_years : null,
       });
       setPatient(res);
-    } catch (err) {
+    } catch (_err) {
       // Continue locally even if offline / DB conflict
       setPatient({ patient_id: null, name: parsedVitals.name });
     }

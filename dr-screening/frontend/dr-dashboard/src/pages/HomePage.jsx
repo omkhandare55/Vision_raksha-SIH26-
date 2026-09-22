@@ -2,9 +2,12 @@
 import { useEffect, useRef } from "react";
 import {
   Eye, Brain, UserCheck, Smartphone, Shield, Heart,
-  ClipboardList, Camera, Search as SearchIcon,
-  Layers, FileText, ArrowRight, Star, Globe, Link2, Mail,
-  Activity, Sparkles, Calendar, ChevronRight
+  ClipboardList, Camera, CheckCircle, Sparkles, Search as SearchIcon,
+  Layers, FileText, BookOpen, Database, HelpCircle, Mail,
+  ArrowRight, Download, Calendar, AlertTriangle,
+  Stethoscope, Activity, Globe, Users, TrendingUp,
+  Wifi, WifiOff, RefreshCw, ChevronRight,
+  MapPin, Star, Link2
 } from "lucide-react";
 
 /* ── Scroll Animation Hook ── */

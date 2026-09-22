@@ -343,7 +343,7 @@ export default function AdminPage() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((u, i) => (
+                {users.map((u) => (
                   <tr
                     key={u.user_id}
                     className={`border-b border-[#F7FAFB] hover:bg-[#F7FAFB] transition-colors ${!u.is_active ? "opacity-50" : ""}`}

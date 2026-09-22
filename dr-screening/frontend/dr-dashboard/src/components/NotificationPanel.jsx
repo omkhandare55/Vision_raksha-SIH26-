@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import {
-  Bell, X, Check, CheckCheck, Send, Eye,
+  Bell, X, Check, CheckCheck, Send,
   AlertTriangle, Clock, Trash2, BellOff
 } from "lucide-react";
 import { getPendingReviews, getMyReports } from "../utils/api";

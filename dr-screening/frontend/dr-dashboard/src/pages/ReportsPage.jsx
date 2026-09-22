@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import {
   ClipboardList, Clock, CheckCircle, Send,
-  RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Eye, Download
+  RefreshCw, ChevronDown, ChevronUp, Eye, Download
 } from "lucide-react";
 import { getMyReports, getReportUrl } from "../utils/api";
 
@@ -146,7 +146,6 @@ export default function ReportsPage() {
         {filtered.map(report => {
           const isExpanded = expanded === report.screening_id;
           const statusMeta = STATUS_META[report.report_status] || STATUS_META.draft;
-          const StatusIcon = statusMeta.icon;
 
           return (
             <div

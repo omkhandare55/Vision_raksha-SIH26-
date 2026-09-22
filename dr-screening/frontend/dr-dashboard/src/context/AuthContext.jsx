@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check for existing token on mount
+  // Check for existing token on mount & listen for unauthorized 401 events
   useEffect(() => {
     const token = localStorage.getItem("retinai_token");
     const saved = localStorage.getItem("retinai_user");
@@ -21,6 +21,12 @@ export function AuthProvider({ children }) {
       }
     }
     setLoading(false);
+
+    const handleUnauthorized = () => {
+      setUser(null);
+    };
+    window.addEventListener("auth:unauthorized", handleUnauthorized);
+    return () => window.removeEventListener("auth:unauthorized", handleUnauthorized);
   }, []);
 
   const login = async (username, password) => {
