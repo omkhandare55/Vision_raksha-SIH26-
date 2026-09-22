@@ -175,6 +175,8 @@ async def serve_spa(full_path: str):
         index_file = os.path.join(dist_dir, "index.html")
         if os.path.exists(index_file):
             return FileResponse(index_file)
+    if not full_path or full_path == "/":
+        return {"status": "ok", "message": "RetinAI API running. Frontend not built."}
     return JSONResponse(status_code=404, content={"error": "NOT_FOUND", "message": "Resource not found"})
 
 

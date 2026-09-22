@@ -216,6 +216,16 @@ def me(user: TokenData = Depends(get_current_user)):
     }
 
 
+# ── POST /auth/refresh ────────────────────────────────────────
+@router.post("/refresh", summary="Refresh JWT token")
+def refresh_token(user: TokenData = Depends(get_current_user)):
+    token = create_access_token(user)
+    return {
+        "access_token": token,
+        "token_type":   "bearer",
+    }
+
+
 # ── POST /auth/register-admin  (public — admin self sign-up) ──
 # Only creates accounts with role="admin"
 # ASHA & Doctor accounts must be created by an existing admin via /api/admin/users
