@@ -22,13 +22,11 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (err) => {
-    if (err.response?.status === 401) {
+    if (err.response?.status === 401 && !err.config?.url?.includes("/auth/login")) {
       localStorage.removeItem("retinai_token");
       localStorage.removeItem("retinai_user");
-      // Only reload if on protected admin dashboard
-      if (window.location.pathname === "/dashboard") {
-        window.location.reload();
-      }
+      window.dispatchEvent(new Event("auth:unauthorized"));
+      window.location.reload();
     }
     return Promise.reject(err);
   }

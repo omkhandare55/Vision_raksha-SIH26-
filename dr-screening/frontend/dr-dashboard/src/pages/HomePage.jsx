@@ -4,11 +4,11 @@ import { useEffect, useRef } from "react";
 import {
   Eye, Brain, UserCheck, Smartphone, Shield, Heart,
   ClipboardList, Camera, CheckCircle, Sparkles, Search as SearchIcon,
-  Layers, FileText, Phone, BookOpen, Database, HelpCircle, Mail,
-  ArrowRight, Play, Download, Calendar, AlertTriangle,
-  MonitorCheck, Stethoscope, Activity, Globe, Users, TrendingUp,
-  Wifi, WifiOff, RefreshCw, ChevronRight, ExternalLink,
-  MapPin, Clock, Star, Link2
+  Layers, FileText, BookOpen, Database, HelpCircle, Mail,
+  ArrowRight, Download, Calendar, AlertTriangle,
+  Stethoscope, Activity, Globe, Users, TrendingUp,
+  Wifi, WifiOff, RefreshCw, ChevronRight,
+  MapPin, Star, Link2
 } from "lucide-react";
 
 /* ── Scroll Animation Hook ── */

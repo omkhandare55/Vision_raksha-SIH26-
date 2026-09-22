@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import {
   ClipboardList, CheckCircle, AlertTriangle, Clock,
-  RefreshCw, Send, ChevronDown, ChevronUp, User, Eye
+  RefreshCw, Send, ChevronDown, ChevronUp, Eye
 } from "lucide-react";
 import { getPendingReviews, submitDoctorReview } from "../utils/api";
 

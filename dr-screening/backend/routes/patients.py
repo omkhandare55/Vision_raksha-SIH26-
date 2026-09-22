@@ -72,7 +72,7 @@ def list_patients(
     limit:  int           = Query(50, le=200),
     offset: int           = Query(0),
     db:     Session       = Depends(get_db),
-    user:   Optional[TokenData] = Depends(get_optional_user),
+    user:   TokenData     = Depends(get_current_user),
 ):
     q = db.query(Patient)
 
