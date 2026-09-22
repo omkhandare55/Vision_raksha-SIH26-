@@ -16,7 +16,10 @@ from slowapi.errors import RateLimitExceeded
 import torch
 
 # Prevent PyTorch from using 100% of the CPU and lagging local development machines
-torch.set_num_threads(2)
+if os.getenv("RENDER"):
+    torch.set_num_threads(1)
+else:
+    torch.set_num_threads(2)
 
 load_dotenv()
 

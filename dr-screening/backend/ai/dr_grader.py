@@ -342,7 +342,10 @@ class DRGrader:
                 self.thresholds = np.sort(np.array(state.get("mean_thresholds", [0.6, 1.5, 2.5, 3.5]), dtype=np.float64))
 
                 self.ensemble_models = []
-                for f_info in state["folds"]:
+                max_models = int(os.getenv("MAX_ENSEMBLE_MODELS", "1" if os.getenv("RENDER") else "5"))
+                for i, f_info in enumerate(state["folds"]):
+                    if i >= max_models:
+                        break
                     m = timm.create_model(arch, pretrained=False, num_classes=1 if self.is_regression else NUM_CLASSES)
                     m.load_state_dict(f_info["state_dict"])
                     m.to(self.device)
@@ -397,6 +400,11 @@ class DRGrader:
             self.is_regression   = is_regression
             self.arch            = arch
             self.input_size      = _INPUT_SIZES.get(arch, 456)
+
+            # Free up memory explicitly to help prevent OOM on 512MB instances
+            del state
+            import gc
+            gc.collect()
 
             # Use clinical standard thresholds if checkpoint has extreme/skewed thresholds
             if thresholds is not None and max(thresholds) <= 4.0 and min(thresholds) >= 0.2:
