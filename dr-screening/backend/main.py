@@ -60,7 +60,9 @@ async def lifespan(app: FastAPI):
             logger.info(f"Downloading model weights from: {download_url} ...")
             os.makedirs(os.path.dirname(model_path) or "models", exist_ok=True)
             import urllib.request
-            urllib.request.urlretrieve(download_url, model_path)
+            import shutil
+            with urllib.request.urlopen(download_url, timeout=60) as response, open(model_path, 'wb') as out_file:
+                shutil.copyfileobj(response, out_file)
             logger.info(f"Model weights downloaded successfully to {model_path}")
         except Exception as e:
             logger.warning(f"Failed to download model weights from {download_url}: {e}")
