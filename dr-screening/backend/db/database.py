@@ -11,6 +11,10 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
 
+# Compatibility fix: Render & Heroku provide postgres:// but SQLAlchemy requires postgresql://
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 # Use SQLite if no DATABASE_URL provided (dev / offline mode)
 if not DATABASE_URL:
     DATABASE_URL = "sqlite:///./retinai.db"

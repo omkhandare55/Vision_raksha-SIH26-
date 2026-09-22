@@ -37,7 +37,7 @@ class PatientCreate(BaseModel):
 def create_patient(
     body: PatientCreate, 
     db: Session = Depends(get_db),
-    user: Optional[TokenData] = Depends(get_optional_user),
+    user: TokenData = Depends(get_current_user),
 ):
 
     # Check ABHA ID uniqueness
@@ -116,7 +116,7 @@ def list_patients(
 def get_patient(
     patient_id: str, 
     db: Session = Depends(get_db),
-    user: Optional[TokenData] = Depends(get_optional_user),
+    user: TokenData = Depends(get_current_user),
 ):
 
     patient = db.query(Patient).filter(Patient.id == patient_id).first()

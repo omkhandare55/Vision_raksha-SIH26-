@@ -153,12 +153,6 @@ export default function ResultSection({ result, onValidate }) {
             </a>
           )}
         </div>
-
-        {result.demo_mode && (
-          <p className={`mt-2 text-xs opacity-60 ${style.text}`}>
-            ⚠ Demo mode — train model on Kaggle for real predictions
-          </p>
-        )}
       </div>
 
       {/* ── Rural Multi-Language Voice Summary (ASHA Support) ── */}

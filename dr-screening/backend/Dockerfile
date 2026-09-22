@@ -20,8 +20,8 @@ FROM base AS runtime
 WORKDIR /app
 COPY . .
 
-# Create models dir (mounted at runtime with actual .pth)
-RUN mkdir -p models demo_cases
+# Create storage and models dirs
+RUN mkdir -p models media/screenings reports
 
 EXPOSE 8000
 

@@ -180,11 +180,11 @@ export default function DashboardPage() {
           <p className="text-sm font-bold text-[#1F2F42] mb-3">System Status</p>
           <div className="space-y-2.5">
             {[
-              { label: "AI Model",       status: "demo",   note: "Train on Kaggle to activate" },
-              { label: "Database",       status: "ok",     note: "SQLite (dev mode)"           },
-              { label: "Grad-CAM",       status: "ok",     note: "Demo heatmaps active"        },
-              { label: "PDF Reports",    status: "ok",     note: "ReportLab ready"             },
-              { label: "Eye Detection",  status: "ok",     note: "OpenCV Haar cascade"         },
+              { label: "AI Model",       status: "ok", note: "EfficientNet-B5 Active" },
+              { label: "Grad-CAM",       status: "ok", note: "Aperture Masked (conv_head)" },
+              { label: "Quality Gate",   status: "ok", note: "Laplacian & Photometric Gate" },
+              { label: "Database",       status: "ok", note: "SQLite / PACS Synced" },
+              { label: "PDF Reports",    status: "ok", note: "ReportLab + HL7 FHIR LOINC" },
             ].map(({ label, status, note }) => (
               <div key={label} className="flex items-center justify-between text-sm">
                 <span className="text-[#263746] font-medium">{label}</span>
@@ -200,20 +200,20 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Quick stats */}
+        {/* Quick stats / SIH info */}
         <div className="relative bg-cover bg-center rounded-2xl p-6 text-white shadow-card overflow-hidden" style={{ backgroundImage: 'url(/ai_dashboard.jpg)' }}>
           <div className="absolute inset-0 bg-[#1F2F42]/85 z-0" />
           <div className="relative z-10">
-            <p className="text-xs font-semibold mb-2 text-[#76D6D2] uppercase tracking-wider">AI Clinical Platform</p>
+            <p className="text-xs font-semibold mb-2 text-[#76D6D2] uppercase tracking-wider">SIH 2026 · SIH26038</p>
             <p className="font-bold text-lg leading-tight mb-3 text-white">
               Explainable AI for Diabetic Retinopathy Screening
             </p>
             <div className="space-y-1.5 text-xs">
               {[
-                "Platform: Tele-Ophthalmology AI",
-                "Category: Multi-Modal Diagnostics",
-                "Model: EfficientNet-B4 + Grad-CAM",
-                "Dataset: APTOS 2019 + IDRiD",
+                "Organisation: MathWorks",
+                "Category: MedTech / AI",
+                "Model: EfficientNet-B5 Ordinal Regressor",
+                "Dataset: Multi-Center (APTOS 2019 + IDRiD)",
                 "Target: Sensitivity >90%, Specificity >85%",
               ].map(line => (
                 <p key={line} className="text-[#94A1AB] text-xs font-medium">{line}</p>

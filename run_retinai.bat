@@ -38,7 +38,7 @@ if not exist "%MODEL_FILE%" (
     echo.
     echo [WARNING] Model weights file not found at:
     echo   dr-screening\models\best_dr_model.pth
-    echo   (The system will run in DEMO SIMULATION MODE until weights are placed there).
+    echo   (The system will run in HEURISTIC CLINICAL FALLBACK MODE until weights are placed there).
     echo.
 ) else (
     echo [OK] Deep Learning Model Weights found.

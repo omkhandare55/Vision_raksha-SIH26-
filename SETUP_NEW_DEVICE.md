@@ -18,7 +18,7 @@ Because GitHub limits individual files to **100 MB**, certain large or local-onl
 
 | Missing Item | Why It's Missing | How to Fix It on the New Device |
 | :--- | :--- | :--- |
-| **`best_dr_model.pth`** (~109 MB) | Exceeds GitHub's 100 MB upload limit | **Copy it via Pen Drive / Google Drive** into `dr-screening/models/` *(or backend will run in automatic fallback demo mode)*. |
+| **`best_dr_model.pth`** (~109 MB) | Exceeds GitHub's 100 MB upload limit | **Copy it via Pen Drive / Google Drive** into `dr-screening/models/` *(or backend will run in rule-based clinical fallback mode)*. |
 | **`venv/`** (Python Virtual Env) | OS-specific binary packages | Run `pip install -r requirements.txt` (see Step 3 below). |
 | **`node_modules/`** (Frontend) | Standard npm dependencies | Run `npm install` (see Step 4 below). |
 | **`retinai.db`** (SQLite DB) | Database file | **Auto-created automatically** by FastAPI on first launch. |
@@ -35,7 +35,7 @@ Copy `best_dr_model.pth` from your current PC into:
 ```
 SIH26\dr-screening\models\best_dr_model.pth
 ```
-*(Note: If you don't copy the weights, RetinAI will still start and run in **Demo Simulation Mode**).*
+*(Note: If you don't copy the weights, RetinAI will still start and run using **Rule-Based Clinical Feature Scoring**).*
 
 ### Step B: Backend Setup
 ```powershell
