@@ -21,6 +21,13 @@ export function AuthProvider({ children }) {
       }
     }
     setLoading(false);
+
+    // Listen for global JWT expiration events from Axios interceptor
+    const handleJwtExpired = () => {
+      setUser(null);
+    };
+    window.addEventListener("jwt-expired", handleJwtExpired);
+    return () => window.removeEventListener("jwt-expired", handleJwtExpired);
   }, []);
 
   const login = async (username, password) => {
