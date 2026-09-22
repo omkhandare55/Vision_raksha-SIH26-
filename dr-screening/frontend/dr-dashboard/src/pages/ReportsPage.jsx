@@ -6,7 +6,7 @@ import {
   ClipboardList, Clock, CheckCircle, Send,
   RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Eye, Download
 } from "lucide-react";
-import { getMyReports, getReportUrl } from "../utils/api";
+import { getMyReports, downloadReport } from "../utils/api";
 
 const STATUS_META = {
   draft:          { label: "Draft",          icon: Clock,          color: "bg-gray-50 text-gray-600 border-gray-200",   dot: "bg-gray-400" },
@@ -187,17 +187,14 @@ export default function ReportsPage() {
                       <CheckCircle size={14} /> Doctor reviewed
                     </span>
                   )}
-                  <a
-                    href={getReportUrl(report.screening_id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition no-underline"
+                  <button
+                    onClick={(e) => { e.stopPropagation(); downloadReport(report.screening_id); }}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition cursor-pointer"
                     title="Download PDF Report"
                   >
                     <Download size={13} />
                     <span className="hidden sm:inline">PDF</span>
-                  </a>
+                  </button>
                   {isExpanded ? <ChevronUp size={18} className="text-[#94A1AB]" /> : <ChevronDown size={18} className="text-[#94A1AB]" />}
                 </div>
               </div>

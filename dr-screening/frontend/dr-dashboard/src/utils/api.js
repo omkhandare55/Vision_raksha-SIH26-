@@ -76,6 +76,18 @@ export const getPatient = async (id) => {
 export const getReportUrl = (screeningId) =>
   `${API_BASE || ""}/api/report/${screeningId}`;
 
+export const downloadReport = async (screeningId) => {
+  const res = await api.get(`/api/report/${screeningId}`, { responseType: "blob" });
+  const url = URL.createObjectURL(res.data);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `RetinAI_Report_${screeningId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
 export const liveDemo = async (file, caseIndex = 0) => {
   const form = new FormData();
   form.append("file", file);

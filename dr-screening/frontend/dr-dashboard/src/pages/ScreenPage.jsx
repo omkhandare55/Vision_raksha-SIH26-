@@ -8,12 +8,14 @@ import { useState, useEffect } from "react";
 import { Loader2, UserPlus, WifiOff, Clock, ShieldCheck, HeartPulse, Activity, Eye, FileText, ArrowRight, Send, X, ChevronDown, Download } from "lucide-react";
 import ImageCapture   from "../components/ImageCapture";
 import ResultSection  from "../components/ResultSection";
-import { analyseImage, validateScreening, createPatient, listDoctors, shareReport, getReportUrl } from "../utils/api";
+import { analyseImage, validateScreening, createPatient, listDoctors, shareReport, downloadReport } from "../utils/api";
 import { enqueueImage, getPendingCount } from "../utils/offlineQueue";
+import { useAuth } from "../context/AuthContext";
 
 const STEPS = ["Patient Intake", "Fundus Import", "AI Diagnostic Report"];
 
 export default function ScreenPage() {
+  const { user } = useAuth();
   const [step, setStep]         = useState(0);
   const [patient, setPatient]   = useState(null);
   const [vitals, setVitals]     = useState({
@@ -428,15 +430,13 @@ export default function ScreenPage() {
             </div>
             <div className="flex items-center gap-2">
               {result?.screening_id && (
-                <a
-                  href={getReportUrl(result.screening_id)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline text-xs py-2 px-4 gap-2 no-underline"
+                <button
+                  onClick={() => downloadReport(result.screening_id)}
+                  className="btn-outline text-xs py-2 px-4 gap-2"
                 >
                   <Download size={14} />
                   Download PDF
-                </a>
+                </button>
               )}
               <button
                 onClick={openShareModal}
@@ -451,7 +451,7 @@ export default function ScreenPage() {
             </div>
           </div>
 
-          <ResultSection result={result} onValidate={handleValidate} />
+          <ResultSection result={result} onValidate={(user?.role === "doctor" || user?.role === "admin") ? handleValidate : null} />
         </div>
       )}
 
