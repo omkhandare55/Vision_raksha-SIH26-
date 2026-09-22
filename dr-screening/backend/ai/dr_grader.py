@@ -330,8 +330,11 @@ class DRGrader:
             return
 
         try:
+            logger.info("Importing timm...")
             import timm
+            logger.info(f"Loading state dict from {self.model_path}...")
             state = torch.load(self.model_path, map_location=self.device)
+            logger.info("State dict loaded. Building model architecture...")
 
             # Check if this is an ensemble bundle
             if isinstance(state, dict) and "folds" in state:
@@ -343,6 +346,7 @@ class DRGrader:
 
                 self.ensemble_models = []
                 max_models = int(os.getenv("MAX_ENSEMBLE_MODELS", "1" if os.getenv("RENDER") else "5"))
+                logger.info(f"Loading ensemble of {max_models} models...")
                 for i, f_info in enumerate(state["folds"]):
                     if i >= max_models:
                         break

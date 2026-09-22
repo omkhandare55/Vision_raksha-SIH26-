@@ -15,10 +15,9 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import torch
 
-# Prevent PyTorch from using 100% of the CPU and lagging local development machines
-if os.getenv("RENDER"):
-    torch.set_num_threads(1)
-else:
+# Do NOT use torch.set_num_threads(1) on Render as it triggers a known OpenMP deadlock during model loading.
+# Default PyTorch thread pool is fine.
+if not os.getenv("RENDER"):
     torch.set_num_threads(2)
 
 load_dotenv()
