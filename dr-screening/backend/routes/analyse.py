@@ -61,6 +61,7 @@ async def analyse(
     """
 
     # ── Validate file type ───────────────────────────────────
+    logger.info("RECEIVED POST /api/analyse. Patient: %s", patient_id)
     if file.content_type not in ALLOWED_TYPES:
         raise HTTPException(
             status_code=400,
