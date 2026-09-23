@@ -57,6 +57,7 @@ WORKDIR /app/backend
 
 ENV PYTHONUNBUFFERED=1
 ENV ENVIRONMENT=production
+ENV CORS_ORIGINS=*
 ENV HF_HUB_OFFLINE=1
 # Prevent glibc memory fragmentation (crucial for restricted RAM limits)
 ENV MALLOC_ARENA_MAX=2
