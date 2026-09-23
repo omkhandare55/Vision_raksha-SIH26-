@@ -28,5 +28,10 @@ RUN mkdir -p models media/screenings reports
 ENV PYTHONUNBUFFERED=1
 ENV ENVIRONMENT=production
 ENV HF_HUB_OFFLINE=1
+# Prevent glibc memory fragmentation (crucial for 512MB RAM limits)
+ENV MALLOC_ARENA_MAX=2
+ENV OMP_NUM_THREADS=1
+ENV OPENBLAS_NUM_THREADS=1
+ENV MKL_NUM_THREADS=1
 
 CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-7860}"]

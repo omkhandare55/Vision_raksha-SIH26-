@@ -363,17 +363,8 @@ class DRGrader:
                     if i >= max_models:
                         break
                     
-                    if hasattr(torch, "device") and "meta" in str(torch.device("meta")):
-                        with torch.device("meta"):
-                            m = timm.create_model(arch, pretrained=False, num_classes=1 if self.is_regression else NUM_CLASSES)
-                        try:
-                            m.load_state_dict(f_info["state_dict"], assign=True)
-                        except TypeError:
-                            m = timm.create_model(arch, pretrained=False, num_classes=1 if self.is_regression else NUM_CLASSES)
-                            m.load_state_dict(f_info["state_dict"])
-                    else:
-                        m = timm.create_model(arch, pretrained=False, num_classes=1 if self.is_regression else NUM_CLASSES)
-                        m.load_state_dict(f_info["state_dict"])
+                    m = timm.create_model(arch, pretrained=False, num_classes=1 if self.is_regression else NUM_CLASSES)
+                    m.load_state_dict(f_info["state_dict"])
                         
                     m.to(self.device)
                     m.eval()
@@ -415,27 +406,12 @@ class DRGrader:
                 if in_features == 2048:
                     arch = "efficientnet_b5"
 
-            # Build model and load weights with ZERO memory overhead using 'meta' device
-            logger.info("Building model on 'meta' device to save RAM...")
+            # Build model and load weights
+            logger.info("Building model architecture...")
+            model = timm.create_model(arch, pretrained=False, num_classes=num_classes)
             
-            # PyTorch 2.x optimization: build model without allocating RAM for weights
-            if hasattr(torch, "device") and "meta" in str(torch.device("meta")):
-                with torch.device("meta"):
-                    model = timm.create_model(arch, pretrained=False, num_classes=num_classes)
-                
-                logger.info("Assigning memory-mapped weights to meta model...")
-                # assign=True replaces the empty meta tensors with the mmap tensors from disk
-                try:
-                    model.load_state_dict(state, assign=True)
-                except TypeError:
-                    # Fallback for older PyTorch versions that don't support assign=True
-                    logger.warning("assign=True not supported, falling back to standard load_state_dict")
-                    model = timm.create_model(arch, pretrained=False, num_classes=num_classes)
-                    model.load_state_dict(state)
-            else:
-                model = timm.create_model(arch, pretrained=False, num_classes=num_classes)
-                model.load_state_dict(state)
-
+            logger.info("Loading state dict into model...")
+            model.load_state_dict(state)
             model.to(self.device)
             model.eval()
 
