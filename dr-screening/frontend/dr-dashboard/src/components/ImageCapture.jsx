@@ -5,7 +5,7 @@
 import { useState, useRef, useCallback } from "react";
 import { Upload, X, Eye, FileText, CheckCircle2 } from "lucide-react";
 
-export default function ImageCapture({ onImageReady, disabled }) {
+export default function ImageCapture({ onImageReady }) {
   const [preview, setPreview]     = useState(null);
   const [fileName, setFileName]   = useState("");
   const [fileSize, setFileSize]   = useState("");

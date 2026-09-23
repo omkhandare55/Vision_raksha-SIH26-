@@ -61,9 +61,7 @@ const NAV_ADMIN = [
   { to: "/reviews",     icon: Send,            label: "Reviews"      },
 ];
 
-const NAV_PUBLIC = [
-  { to: "/", icon: HomeIcon, label: "Home" },
-];
+
 
 function getNavForRole(role) {
   if (role === "doctor")  return NAV_DOCTOR;
