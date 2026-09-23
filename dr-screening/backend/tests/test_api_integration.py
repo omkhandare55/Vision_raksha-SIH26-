@@ -292,6 +292,17 @@ class TestReport:
         assert r.status_code == 200
         assert r.headers["content-type"] == "application/pdf"
 
+    def test_report_with_query_token_returns_pdf(self, raw_client, client, validated_id):
+        # Obtain a valid token via JSON login (same credentials as client fixture)
+        r_auth = raw_client.post("/auth/login", json={"username": "asha_demo", "password": "asha123"})
+        assert r_auth.status_code == 200, f"Login failed: {r_auth.text}"
+        token = r_auth.json()["access_token"]
+        # Query with token in URL parameter — no Authorization header (browser download simulation)
+        r = raw_client.get(f"/api/report/{validated_id}?token={token}")
+        assert r.status_code == 200
+        assert r.headers["content-type"] == "application/pdf"
+        assert len(r.content) > 500
+
     def test_report_is_non_empty(self, client, validated_id):
         r = client.get(f"/api/report/{validated_id}")
         assert len(r.content) > 500

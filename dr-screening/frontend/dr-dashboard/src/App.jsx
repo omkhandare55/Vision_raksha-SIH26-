@@ -1,6 +1,5 @@
-// src/App.jsx — VisionRaksha: Root app with public landing + auth-gated dashboard
+import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, NavLink, useLocation, Navigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 import {
   Eye, LayoutDashboard, Users, Home as HomeIcon,
   Menu, X, Wifi, WifiOff, LogOut, ChevronDown,
@@ -8,18 +7,28 @@ import {
 } from "lucide-react";
 
 import NotificationPanel from "./components/NotificationPanel";
-
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import LoginPage from "./pages/LoginPage";
 
-// Pages
-import HomePage        from "./pages/HomePage";
-import ScreenPage      from "./pages/ScreenPage";
-import DashboardPage   from "./pages/DashboardPage";
-import PatientsPage    from "./pages/PatientsPage";
-import AdminPage       from "./pages/AdminPage";
-import DoctorReviewPage from "./pages/DoctorReviewPage";
-import ReportsPage     from "./pages/ReportsPage";
+// Lazy-loaded route components for maximum performance & bundle optimization
+const LoginPage        = lazy(() => import("./pages/LoginPage"));
+const HomePage         = lazy(() => import("./pages/HomePage"));
+const ScreenPage       = lazy(() => import("./pages/ScreenPage"));
+const DashboardPage    = lazy(() => import("./pages/DashboardPage"));
+const PatientsPage     = lazy(() => import("./pages/PatientsPage"));
+const AdminPage        = lazy(() => import("./pages/AdminPage"));
+const DoctorReviewPage = lazy(() => import("./pages/DoctorReviewPage"));
+const ReportsPage      = lazy(() => import("./pages/ReportsPage"));
+
+function PageLoader() {
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center p-6">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-10 h-10 border-3 border-[#E8F7F6] border-t-[#22AEB0] rounded-full animate-spin" />
+        <p className="text-xs text-[#94A1AB] font-medium animate-pulse">Loading module...</p>
+      </div>
+    </div>
+  );
+}
 
 /* ── VisionRaksha Eye + AI Logo SVG ── */
 function VRLogo({ size = 32 }) {
@@ -60,8 +69,6 @@ const NAV_ADMIN = [
   { to: "/patients",    icon: Users,           label: "Patients"     },
   { to: "/reviews",     icon: Send,            label: "Reviews"      },
 ];
-
-
 
 function getNavForRole(role) {
   if (role === "doctor")  return NAV_DOCTOR;
@@ -226,25 +233,27 @@ function AuthenticatedApp() {
       )}
 
       <main className="flex-1">
-        <Routes>
-          {/* Shared */}
-          <Route path="/" element={<Navigate to={user?.role === "doctor" ? "/dashboard" : user?.role === "admin" ? "/dashboard" : "/screen"} replace />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* Shared */}
+            <Route path="/" element={<Navigate to={user?.role === "doctor" ? "/dashboard" : user?.role === "admin" ? "/dashboard" : "/screen"} replace />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
 
-          {/* ASHA worker routes */}
-          <Route path="/screen"   element={<ScreenPage />} />
-          <Route path="/patients" element={<PatientsPage />} />
-          <Route path="/reports"  element={<ReportsPage />} />
+            {/* ASHA worker routes */}
+            <Route path="/screen"   element={<ScreenPage />} />
+            <Route path="/patients" element={<PatientsPage />} />
+            <Route path="/reports"  element={<ReportsPage />} />
 
-          {/* Doctor routes */}
-          <Route path="/reviews"  element={<DoctorReviewPage />} />
+            {/* Doctor routes */}
+            <Route path="/reviews"  element={<DoctorReviewPage />} />
 
-          {/* Admin routes */}
-          <Route path="/admin"    element={<AdminPage />} />
+            {/* Admin routes */}
+            <Route path="/admin"    element={<AdminPage />} />
 
-          {/* Fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+            {/* Fallback */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </main>
     </div>
   );
@@ -252,6 +261,8 @@ function AuthenticatedApp() {
 
 /* ── Public Nav Bar (for non-authenticated users) ── */
 function PublicNav() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <nav className="sticky top-0 z-50 bg-[#1F2F42] shadow-nav">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -267,16 +278,48 @@ function PublicNav() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="#features" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">Features</a>
-            <a href="#workflow" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">How It Works</a>
-            <a href="#about" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">About</a>
-            <NavLink to="/login" className="btn-primary text-xs py-2 px-5 ml-2">
+          <div className="flex items-center gap-2">
+            {/* Desktop links */}
+            <div className="hidden sm:flex items-center gap-3">
+              <a href="#features" className="text-sm text-[#94A1AB] hover:text-white transition font-medium">Features</a>
+              <a href="#workflow" className="text-sm text-[#94A1AB] hover:text-white transition font-medium">How It Works</a>
+              <a href="#about" className="text-sm text-[#94A1AB] hover:text-white transition font-medium">About</a>
+            </div>
+            <NavLink to="/login" className="btn-primary text-xs py-2 px-4 ml-2">
               Sign In
             </NavLink>
+            {/* Mobile hamburger */}
+            <button
+              className="sm:hidden text-[#94A1AB] hover:text-white p-2 ml-1"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div className="sm:hidden bg-[#26394D] border-t border-white/10 px-4 py-3 space-y-1">
+          <a
+            href="#features"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[#94A1AB] hover:text-white hover:bg-white/5 transition"
+          >Features</a>
+          <a
+            href="#workflow"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[#94A1AB] hover:text-white hover:bg-white/5 transition"
+          >How It Works</a>
+          <a
+            href="#about"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[#94A1AB] hover:text-white hover:bg-white/5 transition"
+          >About</a>
+        </div>
+      )}
     </nav>
   );
 }
@@ -286,11 +329,13 @@ function PublicApp() {
     <div className="min-h-screen flex flex-col bg-[#F7FAFB]">
       <PublicNav />
       <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </main>
     </div>
   );

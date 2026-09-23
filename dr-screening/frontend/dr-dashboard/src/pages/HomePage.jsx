@@ -2,9 +2,12 @@
 import { useEffect, useRef } from "react";
 import {
   Eye, Brain, UserCheck, Smartphone, Shield, Heart,
-  ClipboardList, Camera, Search as SearchIcon,
-  Layers, FileText, ArrowRight, Star, Globe, Link2, Mail,
-  Activity, Sparkles, Calendar, ChevronRight
+  ClipboardList, Camera, CheckCircle, Sparkles, Search as SearchIcon,
+  Layers, FileText, BookOpen, Database, HelpCircle, Mail,
+  ArrowRight, Download, Calendar, AlertTriangle,
+  Stethoscope, Activity, Globe, Users, TrendingUp,
+  Wifi, WifiOff, RefreshCw, ChevronRight,
+  MapPin, Star, Link2
 } from "lucide-react";
 
 /* ── Scroll Animation Hook ── */
@@ -106,11 +109,11 @@ function HeroSection() {
               {/* Mock Images */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="rounded-xl overflow-hidden bg-[#0A1628] aspect-square flex items-center justify-center relative">
-                  <img src="/fundus.jpg" alt="Retinal Fundus" className="w-full h-full object-cover" />
+                  <img src="/fundus.jpg" alt="Retinal Fundus" loading="lazy" className="w-full h-full object-cover" />
                   <p className="absolute bottom-2 text-[9px] bg-black/50 px-2 py-0.5 rounded-full text-white font-medium">Retinal Fundus</p>
                 </div>
                 <div className="rounded-xl overflow-hidden bg-[#0A1628] aspect-square flex items-center justify-center relative">
-                  <img src="/heatmap.jpg" alt="Grad-CAM Heatmap" className="w-full h-full object-cover" />
+                  <img src="/heatmap.jpg" alt="Grad-CAM Heatmap" loading="lazy" className="w-full h-full object-cover" />
                   <p className="absolute bottom-2 text-[9px] bg-black/50 px-2 py-0.5 rounded-full text-white font-medium">Grad-CAM Heatmap</p>
                 </div>
               </div>

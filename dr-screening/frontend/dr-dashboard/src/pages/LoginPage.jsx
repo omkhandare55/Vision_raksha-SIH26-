@@ -115,31 +115,31 @@ export default function LoginPage() {
 
       <div className="w-full max-w-md z-10">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-3 mb-4">
-            <div className="p-3.5 bg-[#22AEB0]/15 rounded-2xl backdrop-blur-md border border-[#22AEB0]/20 shadow-lg">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-3 mb-3 sm:mb-4">
+            <div className="p-3 sm:p-3.5 bg-[#22AEB0]/15 rounded-2xl backdrop-blur-md border border-[#22AEB0]/20 shadow-lg">
               <VRLogo />
             </div>
             <div className="text-left">
-              <h1 className="text-3xl font-bold text-white tracking-wide">
+              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-wide">
                 Vision<span className="text-[#22AEB0]">Raksha</span>
               </h1>
-              <p className="text-[#76D6D2] text-xs font-semibold uppercase tracking-wider">AI for Healthier Tomorrows</p>
+              <p className="text-[#76D6D2] text-[10px] sm:text-xs font-semibold uppercase tracking-wider">AI for Healthier Tomorrows</p>
             </div>
           </div>
-          <p className="text-[#94A1AB] text-sm font-medium">
+          <p className="text-[#94A1AB] text-xs sm:text-sm font-medium px-2">
             Explainable AI for Diabetic Retinopathy Screening
           </p>
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-[#E1E9EC] overflow-hidden">
+        <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-[#E1E9EC] overflow-hidden">
 
           {/* ── Mode Tabs ── */}
           <div className="flex border-b border-[#E1E9EC]">
             <button
               onClick={() => switchMode("signin")}
-              className={`flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer
+              className={`flex-1 py-3.5 sm:py-4 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer touch-target
                 ${mode === "signin"
                   ? "text-[#22AEB0] border-b-2 border-[#22AEB0] bg-white"
                   : "text-[#94A1AB] hover:text-[#657685] bg-[#F7FAFB]"}`}
@@ -148,7 +148,7 @@ export default function LoginPage() {
             </button>
             <button
               onClick={() => switchMode("admin-signup")}
-              className={`flex-1 py-4 text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer
+              className={`flex-1 py-3.5 sm:py-4 text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all cursor-pointer touch-target
                 ${mode === "admin-signup"
                   ? "text-[#22AEB0] border-b-2 border-[#22AEB0] bg-white"
                   : "text-[#94A1AB] hover:text-[#657685] bg-[#F7FAFB]"}`}
@@ -157,7 +157,7 @@ export default function LoginPage() {
             </button>
           </div>
 
-          <div className="p-8">
+          <div className="p-5 sm:p-8">
 
             {/* ══ SIGN IN ══════════════════════════════════════ */}
             {mode === "signin" && (
