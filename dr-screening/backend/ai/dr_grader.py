@@ -155,8 +155,7 @@ class DRGrader:
 
         tensor = _to_tensor(img, self.input_size)
         tensor = tensor.unsqueeze(0).to(self.device)   # (1, 3, H, W)
-        if os.getenv("DISABLE_GRADCAM") != "1":
-            tensor.requires_grad_(True)
+        # tensor.requires_grad_(True)  # Disabled for memory constraints
         return tensor
 
     def grade(self, tensor: torch.Tensor) -> GradeResult:
@@ -187,8 +186,7 @@ class DRGrader:
         if self.use_tta:
             raw_score = self._tta_predict(tensor)
         else:
-    
-            with torch.set_grad_enabled(os.getenv("DISABLE_GRADCAM") != "1"):
+            with torch.set_grad_enabled(False):
                 out = self.model(tensor)
             raw_score = float(out.detach().cpu().squeeze().item())
 
@@ -408,15 +406,8 @@ class DRGrader:
                 if in_features == 2048:
                     arch = "efficientnet_b5"
 
-            self.input_size = _INPUT_SIZES.get(arch, 456)
-    
-            if os.getenv("DISABLE_GRADCAM") == "1":
-                # 🚨 EMERGENCY MEMORY HACK for 512MB RAM instances 🚨
-                # Downscale input from 456x456 to 300x300.
-                # EfficientNet uses Global Average Pooling so it accepts any resolution.
-                # This reduces PyTorch activation memory footprint by ~2.3x (from 200MB to 85MB).
-                self.input_size = 300
-                logger.warning(f"Low-RAM mode active: downscaling {arch} input to {self.input_size}px")
+            self.input_size = 300  # Hardcoded memory hack for 512MB Railway instance (down from 456)
+            logger.warning(f"Low-RAM mode active: downscaling {arch} input to {self.input_size}px")
 
             # Build model and load weights
             logger.info("Building model architecture...")
