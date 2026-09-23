@@ -89,7 +89,7 @@ export default function DoctorReviewPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-6">
       {/* Toast */}
       {toast && (
         <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-sm font-semibold
@@ -103,21 +103,21 @@ export default function DoctorReviewPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">Review Queue</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#1F2F42] tracking-tight">Review Queue</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Reports shared by ASHA workers awaiting your clinical review
           </p>
         </div>
-        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4">
+        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4 w-fit">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card-static p-4 flex items-center gap-3">
           <div className="p-2.5 bg-amber-50 rounded-xl"><Clock size={18} className="text-amber-500" /></div>
           <div>
@@ -226,7 +226,7 @@ export default function DoctorReviewPage() {
                 <div className="border-t border-[#E1E9EC] p-6 space-y-5 bg-[#FAFCFD]">
                   {/* Images */}
                   {(report.image_url || report.heatmap_url) && (
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {report.image_url && (
                         <div>
                           <p className="text-xs font-semibold text-[#657685] mb-2 flex items-center gap-1.5">
@@ -324,7 +324,7 @@ export default function DoctorReviewPage() {
                     {/* Urgency */}
                     <div>
                       <label className="block text-xs font-semibold text-[#657685] mb-2">Urgency Level *</label>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         {URGENCY_OPTIONS.map(opt => (
                           <button
                             key={opt.value}

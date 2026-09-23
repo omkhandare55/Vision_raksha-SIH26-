@@ -291,7 +291,7 @@ function PatientDetail({ patient }) {
             </div>
 
             {/* Visit Selectors */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="text-xs font-semibold text-[#657685] block mb-1">Baseline Visit (Earlier)</label>
                 <select
@@ -323,7 +323,7 @@ function PatientDetail({ patient }) {
             </div>
 
             {/* Comparison Cards */}
-            <div className="grid grid-cols-2 gap-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               <div className="border border-[#E1E9EC] rounded-2xl p-4 bg-[#F7FAFB] space-y-2">
                 <p className="text-xs font-bold text-[#94A1AB] uppercase tracking-wider">Baseline</p>
                 <p className="text-lg font-bold text-[#1F2F42]">
@@ -417,7 +417,7 @@ function AddPatientModal({ onClose, onAdded }) {
         </div>
         <form onSubmit={submit} className="px-6 py-4 space-y-3.5">
           <Field label="Full Name *" name="name" required placeholder="Ramesh Kumar" />
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Age *" name="age" type="number" required min="1" max="120" placeholder="52" />
             <div>
               <label className="text-xs font-semibold text-[#657685]">Gender</label>

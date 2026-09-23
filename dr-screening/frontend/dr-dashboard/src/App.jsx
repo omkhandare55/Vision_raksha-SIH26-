@@ -261,6 +261,8 @@ function AuthenticatedApp() {
 
 /* ── Public Nav Bar (for non-authenticated users) ── */
 function PublicNav() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <nav className="sticky top-0 z-50 bg-[#1F2F42] shadow-nav">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -276,16 +278,48 @@ function PublicNav() {
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="#features" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">Features</a>
-            <a href="#workflow" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">How It Works</a>
-            <a href="#about" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">About</a>
-            <NavLink to="/login" className="btn-primary text-xs py-2 px-5 ml-2">
+          <div className="flex items-center gap-2">
+            {/* Desktop links */}
+            <div className="hidden sm:flex items-center gap-3">
+              <a href="#features" className="text-sm text-[#94A1AB] hover:text-white transition font-medium">Features</a>
+              <a href="#workflow" className="text-sm text-[#94A1AB] hover:text-white transition font-medium">How It Works</a>
+              <a href="#about" className="text-sm text-[#94A1AB] hover:text-white transition font-medium">About</a>
+            </div>
+            <NavLink to="/login" className="btn-primary text-xs py-2 px-4 ml-2">
               Sign In
             </NavLink>
+            {/* Mobile hamburger */}
+            <button
+              className="sm:hidden text-[#94A1AB] hover:text-white p-2 ml-1"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {mobileOpen && (
+        <div className="sm:hidden bg-[#26394D] border-t border-white/10 px-4 py-3 space-y-1">
+          <a
+            href="#features"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[#94A1AB] hover:text-white hover:bg-white/5 transition"
+          >Features</a>
+          <a
+            href="#workflow"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[#94A1AB] hover:text-white hover:bg-white/5 transition"
+          >How It Works</a>
+          <a
+            href="#about"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center px-4 py-3 rounded-xl text-sm font-medium text-[#94A1AB] hover:text-white hover:bg-white/5 transition"
+          >About</a>
+        </div>
+      )}
     </nav>
   );
 }

@@ -119,7 +119,7 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="max-w-5xl mx-auto p-3 sm:p-6 space-y-6">
       {/* Toast */}
       {toast && (
         <div className={`fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-sm font-semibold transition-all
@@ -133,14 +133,14 @@ export default function AdminPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">User Management</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#1F2F42] tracking-tight">User Management</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Create and manage ASHA worker and doctor accounts
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-shrink-0">
           <button onClick={fetchUsers} disabled={loading} className="btn-outline gap-2 text-xs py-2.5 px-4">
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
             Refresh
@@ -153,7 +153,7 @@ export default function AdminPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { role: "asha",   label: "ASHA Workers", color: "text-[#22AEB0]", bg: "bg-[#E8F7F6]" },
           { role: "doctor", label: "Doctors",      color: "text-blue-600",  bg: "bg-blue-50"   },
@@ -200,7 +200,7 @@ export default function AdminPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-[#657685] mb-1.5">Full Name *</label>
                   <input

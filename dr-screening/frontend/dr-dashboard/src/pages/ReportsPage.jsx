@@ -67,23 +67,23 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">My Reports</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#1F2F42] tracking-tight">My Reports</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Track your screening reports and doctor reviews
           </p>
         </div>
-        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4">
+        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4 w-fit">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="card-static p-4 text-center">
           <p className="text-2xl font-bold text-[#22AEB0]">{counts.all}</p>
           <p className="text-xs text-[#657685] font-semibold mt-0.5">Total Reports</p>
