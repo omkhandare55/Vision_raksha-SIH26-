@@ -113,7 +113,7 @@ else:
     app.add_middleware(
         CORSMiddleware,
         allow_origins      = CORS_ORIGINS,
-        allow_origin_regex = r"https://.*\.vercel\.app|https://.*\.onrender\.com",
+        allow_origin_regex = r"https://.*\.vercel\.app|https://.*\.onrender\.com|https://.*\.up\.railway\.app",
         allow_credentials  = True,
         allow_methods      = ["*"],
         allow_headers      = ["*"],
