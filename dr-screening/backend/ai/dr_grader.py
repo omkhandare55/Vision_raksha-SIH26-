@@ -340,11 +340,11 @@ class DRGrader:
             logger.info(f"Loading state dict from {self.model_path}...")
             try:
                 # Try memory mapping first (saves 100MB+ RAM, but requires newer PyTorch zip format)
-                state = torch.load(self.model_path, map_location=self.device, mmap=True)
+                state = torch.load(self.model_path, map_location=self.device, mmap=True, weights_only=False)
                 logger.info("Successfully loaded state dict using mmap=True (memory mapped).")
             except Exception as mmap_err:
                 logger.warning(f"Could not use mmap=True ({mmap_err}). Falling back to standard load.")
-                state = torch.load(self.model_path, map_location=self.device)
+                state = torch.load(self.model_path, map_location=self.device, weights_only=False)
                 
             logger.info("State dict loaded. Building model architecture...")
 
