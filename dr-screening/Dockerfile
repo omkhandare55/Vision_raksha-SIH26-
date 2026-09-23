@@ -63,6 +63,7 @@ ENV MALLOC_ARENA_MAX=2
 ENV OMP_NUM_THREADS=1
 ENV OPENBLAS_NUM_THREADS=1
 ENV MKL_NUM_THREADS=1
+ENV MODEL_DOWNLOAD_URL=https://huggingface.co/omii5/retinai-dr-model/resolve/main/best_dr_model.pth?download=true
 
 EXPOSE 8000 8080
 

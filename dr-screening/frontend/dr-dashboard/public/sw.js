@@ -2,7 +2,7 @@
 // Strategy: Cache-first for assets, Network-first for API, Offline queue for images
 // Spec: TRD Section 7 (Offline-first PWA)
 
-const CACHE_NAME     = "retinai-v4-theme-update";
+const CACHE_NAME     = "retinai-v5-spa-fix";
 const OFFLINE_URL    = "/offline.html";
 
 // Assets to pre-cache on install
@@ -106,6 +106,23 @@ async function networkFirst(request) {
 }
 
 async function cacheFirst(request) {
+  // SPA navigation: always serve the cached app shell (index.html) so React Router handles routing
+  if (request.mode === "navigate") {
+    try {
+      const response = await fetch(request.clone());
+      const cache    = await caches.open(CACHE_NAME);
+      cache.put(request, response.clone());
+      return response;
+    } catch {
+      // Fallback to cached root (index.html app shell) for any SPA route
+      const cachedRoot = await caches.match("/");
+      if (cachedRoot) return cachedRoot;
+      const offlinePage = await caches.match(OFFLINE_URL);
+      return offlinePage || new Response("Offline", { status: 503 });
+    }
+  }
+
+  // Static assets: cache-first
   const cached = await caches.match(request);
   if (cached) return cached;
   try {
@@ -114,10 +131,6 @@ async function cacheFirst(request) {
     if (request.method === "GET") cache.put(request, response.clone());
     return response;
   } catch {
-    // Return offline page for navigation requests
-    if (request.mode === "navigate") {
-      return caches.match(OFFLINE_URL) || new Response("Offline", { status: 503 });
-    }
     return new Response("Offline", { status: 503 });
   }
 }
@@ -186,8 +199,8 @@ self.addEventListener("push", (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
-      icon: "/icon-192.png",
-      badge: "/icon-192.png",
+      icon: "/favicon.svg",
+      badge: "/favicon.svg",
       tag: "retinai-notification",
     })
   );
