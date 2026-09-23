@@ -83,7 +83,10 @@ async def analyse(
         )
 
     # ── Read & size-check ────────────────────────────────────
+    logger.info("Reading file into memory...")
     image_bytes = await file.read()
+    logger.info("File read successfully, size: %s bytes", len(image_bytes))
+
     if len(image_bytes) > MAX_FILE_SIZE:
         raise HTTPException(
             status_code=400,
@@ -97,6 +100,7 @@ async def analyse(
     pipeline = get_pipeline()
 
     try:
+        logger.info("Starting pipeline.analyse...")
         result: PipelineResult = pipeline.analyse(
             image_bytes    = image_bytes,
             age            = age,
@@ -104,6 +108,7 @@ async def analyse(
             diabetes_years = diabetes_years,
             sys_bp         = sys_bp,
         )
+        logger.info("pipeline.analyse completed.")
     except ValueError as e:
         # Quality rejection — return structured 400
         parts = str(e).split(":", 1)

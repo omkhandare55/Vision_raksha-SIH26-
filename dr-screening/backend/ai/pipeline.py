@@ -97,10 +97,13 @@ class AnalysisPipeline:
         Run full multi-modal pipeline with Patient Age and Clinical Vitals.
         Model sees raw image (no CLAHE). Display uses enhanced image.
         """
+        logger.info("Pipeline.analyse: Starting")
         t0 = time.monotonic()
 
         # ── Step 1: Quality ──────────────────────────────────
+        logger.info("Pipeline.analyse: Checking quality")
         q = self.quality_checker.assess(image_bytes)
+        logger.info("Pipeline.analyse: Quality check complete. Action: %s", q.action)
 
         if q.action == QualityAction.REJECT:
             msgs = self.quality_checker.get_rejection_message(q.details)
@@ -110,8 +113,11 @@ class AnalysisPipeline:
         display_image = q.image       # possibly CLAHE-enhanced → for DISPLAY
 
         # ── Step 2: Grade (model sees raw_image) ─────────────
+        logger.info("Pipeline.analyse: Preprocessing tensor")
         tensor       = self.grader.preprocess(raw_image)
+        logger.info("Pipeline.analyse: Running grader")
         grade_result = self.grader.grade(tensor)
+        logger.info("Pipeline.analyse: Grading complete")
 
         # ── Step 3: Grad-CAM (overlay on display image) ──────
         cam_out = self.gradcam.generate(
@@ -125,10 +131,13 @@ class AnalysisPipeline:
         # Model grading (Step 2) still uses raw_image — this is correct.
         cv_features = None
         try:
+            logger.info("Pipeline.analyse: Starting CV Analysis")
             from ai.image_analyzer import analyze_image
             enhanced_for_cv = self.quality_checker.enhance_full(raw_image)
             cv_features = analyze_image(enhanced_for_cv)
-        except Exception:
+            logger.info("Pipeline.analyse: CV Analysis complete")
+        except Exception as e:
+            logger.warning("Pipeline.analyse: CV Analysis failed: %s", e)
             pass  # CV analysis is optional
 
         # ── Step 5: Findings & Multi-Modal Risk ──────────────
