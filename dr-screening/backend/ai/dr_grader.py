@@ -134,7 +134,7 @@ class DRGrader:
         self.input_size      = 456
         self.arch            = "efficientnet_b5"
         self.temperature     = 1.5    # Temperature Scaling (calibrated on val set if available)
-        self.use_tta         = True
+        self.use_tta         = False  # Disabled to save RAM on Railway
         self._load_model()
 
     # ── Public API ───────────────────────────────────────────
@@ -155,7 +155,8 @@ class DRGrader:
 
         tensor = _to_tensor(img, self.input_size)
         tensor = tensor.unsqueeze(0).to(self.device)   # (1, 3, H, W)
-        tensor.requires_grad_(True)
+        if os.getenv("DISABLE_GRADCAM") != "1":
+            tensor.requires_grad_(True)
         return tensor
 
     def grade(self, tensor: torch.Tensor) -> GradeResult:
@@ -186,7 +187,8 @@ class DRGrader:
         if self.use_tta:
             raw_score = self._tta_predict(tensor)
         else:
-            with torch.set_grad_enabled(True):
+            import os
+            with torch.set_grad_enabled(os.getenv("DISABLE_GRADCAM") != "1"):
                 out = self.model(tensor)
             raw_score = float(out.detach().cpu().squeeze().item())
 

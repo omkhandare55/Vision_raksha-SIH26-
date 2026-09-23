@@ -50,7 +50,8 @@ class GradCAMEngine:
             cam_array    : raw normalised CAM (H,W) float32 in [0,1]
         """
         with self._lock:
-            if self.model is None:
+            import os
+            if self.model is None or os.getenv("DISABLE_GRADCAM") == "1":
                 return self._demo_heatmap(original)
     
             # ── forward pass ────────────────────────────────────

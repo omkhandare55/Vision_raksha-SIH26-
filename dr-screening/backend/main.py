@@ -18,7 +18,7 @@ import torch
 # Do NOT use torch.set_num_threads(1) on Render as it triggers a known OpenMP deadlock during model loading.
 # Default PyTorch thread pool is fine.
 if not os.getenv("RENDER"):
-    torch.set_num_threads(2)
+    torch.set_num_threads(1)
 
 load_dotenv()
 
