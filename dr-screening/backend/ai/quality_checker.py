@@ -72,8 +72,11 @@ class QualityChecker:
     # ── private helpers ─────────────────────────────────────
 
     def _load(self, image_bytes: bytes) -> np.ndarray:
-        """Decode bytes → RGB numpy array."""
+        """Decode bytes → RGB numpy array, resized to max 1024px to save RAM."""
         pil = Image.open(io.BytesIO(image_bytes)).convert("RGB")
+        # Resize to max 1024x1024 to prevent OOM on 512MB Railway instances
+        # (cv2.Laplacian on a 12MP image takes 96MB of RAM just for the float64 matrix)
+        pil.thumbnail((1024, 1024), Image.Resampling.LANCZOS)
         return np.array(pil)
 
     def _score(self, img: np.ndarray) -> dict:

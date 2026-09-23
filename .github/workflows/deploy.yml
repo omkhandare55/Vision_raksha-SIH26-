@@ -1,0 +1,106 @@
+# ─────────────────────────────────────────────────────────────
+# RetinAI Deploy — Builds & deploys on push to main
+# Builds frontend, then deploys backend (with frontend dist baked in)
+# ─────────────────────────────────────────────────────────────
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # allows manual trigger from GitHub UI
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Build frontend dist ──────────────────────────────────────
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dr-screening/frontend/dr-dashboard
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: dr-screening/frontend/dr-dashboard/package-lock.json
+
+      - name: Install & Build
+        env:
+          VITE_API_URL: ${{ vars.VITE_API_URL || '' }}
+        run: |
+          npm ci || npm install
+          npm run build
+
+      - name: Upload frontend dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: dr-screening/frontend/dr-dashboard/dist/
+          retention-days: 1
+
+  # ── Deploy to Render (or any Docker host) ────────────────────
+  deploy:
+    name: Deploy Backend
+    runs-on: ubuntu-latest
+    needs: build-frontend
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download frontend dist
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: dr-screening/frontend/dr-dashboard/dist/
+
+      # ── Option A: Render Deploy Hook ─────────────────────────
+      # Uncomment and set RENDER_DEPLOY_HOOK_URL in repo secrets
+      - name: Trigger Render Deploy
+        if: ${{ vars.DEPLOY_TARGET == 'render' }}
+        run: |
+          curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo "✅ Render deploy triggered"
+
+      # ── Option B: Docker Hub + any host ──────────────────────
+      # Uncomment if pushing to Docker Hub / GHCR for deployment
+      # - name: Log in to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_TOKEN }}
+      #
+      # - name: Build & Push
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: dr-screening/backend
+      #     push: true
+      #     tags: |
+      #       ${{ secrets.DOCKER_USERNAME }}/retinai-backend:latest
+      #       ${{ secrets.DOCKER_USERNAME }}/retinai-backend:${{ github.sha }}
+
+      # ── Option C: Google Cloud Run ───────────────────────────
+      # Uncomment if deploying to Cloud Run
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: ${{ secrets.GCP_SA_KEY }}
+      #
+      # - name: Deploy to Cloud Run
+      #   uses: google-github-actions/deploy-cloudrun@v2
+      #   with:
+      #     service: retinai-backend
+      #     region: asia-south1
+      #     source: dr-screening/backend
+
+      - name: Deploy summary
+        run: echo "✅ Deployment pipeline complete for commit ${{ github.sha }}"

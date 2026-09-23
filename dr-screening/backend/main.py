@@ -15,8 +15,10 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 import torch
 
-# Prevent PyTorch from using 100% of the CPU and lagging local development machines
-torch.set_num_threads(2)
+# Do NOT use torch.set_num_threads(1) on Render as it triggers a known OpenMP deadlock during model loading.
+# Default PyTorch thread pool is fine.
+if not os.getenv("RENDER"):
+    torch.set_num_threads(1)
 
 load_dotenv()
 
@@ -50,6 +52,13 @@ async def lifespan(app: FastAPI):
         if os.path.exists(alt_path):
             model_path = alt_path
 
+    # Fix Git LFS pointer issue in cloud builds:
+    # If the file exists but is very small (< 1MB), it's likely a Git LFS pointer, not the actual weights.
+    # Delete it so the auto-downloader can fetch the real model.
+    if os.path.exists(model_path) and os.path.getsize(model_path) < 1024 * 1024:
+        logger.warning(f"Model file {model_path} is suspiciously small ({os.path.getsize(model_path)} bytes). It might be a Git LFS pointer. Removing it to trigger download.")
+        os.remove(model_path)
+
     # Optional cloud auto-download (e.g. Render / Cloud Run)
     download_url = os.getenv("MODEL_DOWNLOAD_URL") or os.getenv("MODEL_URL")
     if not os.path.exists(model_path) and download_url:
@@ -57,7 +66,9 @@ async def lifespan(app: FastAPI):
             logger.info(f"Downloading model weights from: {download_url} ...")
             os.makedirs(os.path.dirname(model_path) or "models", exist_ok=True)
             import urllib.request
-            urllib.request.urlretrieve(download_url, model_path)
+            import shutil
+            with urllib.request.urlopen(download_url, timeout=300) as response, open(model_path, 'wb') as out_file:
+                shutil.copyfileobj(response, out_file)
             logger.info(f"Model weights downloaded successfully to {model_path}")
         except Exception as e:
             logger.warning(f"Failed to download model weights from {download_url}: {e}")
@@ -102,7 +113,7 @@ else:
     app.add_middleware(
         CORSMiddleware,
         allow_origins      = CORS_ORIGINS,
-        allow_origin_regex = r"https://.*\.vercel\.app|https://.*\.onrender\.com",
+        allow_origin_regex = r"https://.*\.vercel\.app|https://.*\.onrender\.com|https://.*\.up\.railway\.app",
         allow_credentials  = True,
         allow_methods      = ["*"],
         allow_headers      = ["*"],
@@ -169,11 +180,17 @@ async def serve_spa(full_path: str):
         target_file = os.path.join(dist_dir, full_path)
         if full_path and os.path.exists(target_file) and os.path.isfile(target_file):
             return FileResponse(target_file)
+        
+        # If it's explicitly requesting an asset that's missing, don't return index.html
+        if full_path.endswith((".ico", ".png", ".jpg", ".svg", ".js", ".css", ".json")):
+            return JSONResponse(status_code=404, content={"error": "NOT_FOUND", "message": "Asset not found"})
+            
         index_file = os.path.join(dist_dir, "index.html")
         if os.path.exists(index_file):
             return FileResponse(index_file)
+            
     if not full_path or full_path == "/":
-        return {"message": "RetinAI API is running", "docs": "/docs", "health": "/health"}
+        return {"status": "ok", "message": "RetinAI API running. Frontend not built."}
     return JSONResponse(status_code=404, content={"error": "NOT_FOUND", "message": "Resource not found"})
 
 

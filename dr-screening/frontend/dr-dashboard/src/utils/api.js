@@ -18,32 +18,15 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ── Response interceptor (handle errors & retries for network resilience) ────
+// ── Response interceptor (handle errors globally) ────────────
 api.interceptors.response.use(
   (res) => res,
-  async (err) => {
-    const config = err.config;
-
-    // Retry 5xx errors or network drops up to 2 times for GET requests
-    if (
-      config &&
-      !config._retry &&
-      config.method === "get" &&
-      (!err.response || (err.response.status >= 500 && err.response.status <= 599))
-    ) {
-      config._retry = (config._retry || 0) + 1;
-      if (config._retry <= 2) {
-        const delay = config._retry * 1000;
-        await new Promise((r) => setTimeout(r, delay));
-        return api(config);
-      }
-    }
-
-    if (err.response?.status === 401 && !err.config?.url?.includes("/auth/login")) {
+  (err) => {
+    if (err.response?.status === 401) {
       localStorage.removeItem("retinai_token");
       localStorage.removeItem("retinai_user");
-      window.dispatchEvent(new Event("auth:unauthorized"));
-      window.location.reload();
+      // Dispatch global event for AuthContext to handle graceful logout
+      window.dispatchEvent(new Event("jwt-expired"));
     }
     return Promise.reject(err);
   }
@@ -88,25 +71,19 @@ export const getPatient = async (id) => {
   return res.data;
 };
 
-export const getReportUrl = (screeningId) => {
-  const token = localStorage.getItem("retinai_token");
-  const base = `${API_BASE || ""}/api/report/${screeningId}`;
-  return token ? `${base}?token=${encodeURIComponent(token)}` : base;
-};
+export const getReportUrl = (screeningId) =>
+  `${API_BASE || ""}/api/report/${screeningId}`;
 
-export const downloadReportPdf = async (screeningId) => {
-  const res = await api.get(`/api/report/${screeningId}`, {
-    responseType: "blob",
-  });
-  const blob = new Blob([res.data], { type: "application/pdf" });
-  const url = window.URL.createObjectURL(blob);
+export const downloadReport = async (screeningId) => {
+  const res = await api.get(`/api/report/${screeningId}`, { responseType: "blob" });
+  const url = URL.createObjectURL(res.data);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `VisionRaksha_Report_${screeningId}.pdf`;
+  a.download = `RetinAI_Report_${screeningId}.pdf`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
-  window.URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url);
 };
 
 export const liveDemo = async (file, caseIndex = 0) => {

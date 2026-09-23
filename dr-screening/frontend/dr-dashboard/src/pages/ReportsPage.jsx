@@ -4,9 +4,9 @@
 import { useState, useEffect } from "react";
 import {
   ClipboardList, Clock, CheckCircle, Send,
-  RefreshCw, ChevronDown, ChevronUp, Eye, Download
+  RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Eye, Download
 } from "lucide-react";
-import { getMyReports, downloadReportPdf } from "../utils/api";
+import { getMyReports, downloadReport } from "../utils/api";
 
 const STATUS_META = {
   draft:          { label: "Draft",          icon: Clock,          color: "bg-gray-50 text-gray-600 border-gray-200",   dot: "bg-gray-400" },
@@ -27,19 +27,6 @@ export default function ReportsPage() {
   const [loading, setLoading]   = useState(true);
   const [expanded, setExpanded] = useState(null);
   const [filter, setFilter]     = useState("all");
-  const [downloading, setDownloading] = useState(null); // screening_id being downloaded
-
-  const handleDownloadPdf = async (screeningId, e) => {
-    e.stopPropagation();
-    setDownloading(screeningId);
-    try {
-      await downloadReportPdf(screeningId);
-    } catch (err) {
-      console.error("PDF download failed:", err);
-    } finally {
-      setDownloading(null);
-    }
-  };
 
   const fetchReports = async () => {
     setLoading(true);
@@ -67,23 +54,23 @@ export default function ReportsPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-6">
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl sm:text-2xl font-bold text-[#1F2F42] tracking-tight">My Reports</h1>
+          <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">My Reports</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Track your screening reports and doctor reviews
           </p>
         </div>
-        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4 w-fit">
+        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="card-static p-4 text-center">
           <p className="text-2xl font-bold text-[#22AEB0]">{counts.all}</p>
           <p className="text-xs text-[#657685] font-semibold mt-0.5">Total Reports</p>
@@ -159,6 +146,7 @@ export default function ReportsPage() {
         {filtered.map(report => {
           const isExpanded = expanded === report.screening_id;
           const statusMeta = STATUS_META[report.report_status] || STATUS_META.draft;
+          const StatusIcon = statusMeta.icon;
 
           return (
             <div
@@ -200,15 +188,12 @@ export default function ReportsPage() {
                     </span>
                   )}
                   <button
-                    onClick={(e) => handleDownloadPdf(report.screening_id, e)}
-                    disabled={downloading === report.screening_id}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition cursor-pointer disabled:opacity-50"
+                    onClick={(e) => { e.stopPropagation(); downloadReport(report.screening_id); }}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition cursor-pointer"
                     title="Download PDF Report"
                   >
-                    {downloading === report.screening_id
-                      ? <div className="w-3 h-3 border-2 border-[#22AEB0]/30 border-t-[#22AEB0] rounded-full animate-spin" />
-                      : <Download size={13} />}
-                    <span className="hidden sm:inline">{downloading === report.screening_id ? "…" : "PDF"}</span>
+                    <Download size={13} />
+                    <span className="hidden sm:inline">PDF</span>
                   </button>
                   {isExpanded ? <ChevronUp size={18} className="text-[#94A1AB]" /> : <ChevronDown size={18} className="text-[#94A1AB]" />}
                 </div>

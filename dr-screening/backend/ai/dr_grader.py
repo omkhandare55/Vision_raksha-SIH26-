@@ -134,7 +134,7 @@ class DRGrader:
         self.input_size      = 456
         self.arch            = "efficientnet_b5"
         self.temperature     = 1.5    # Temperature Scaling (calibrated on val set if available)
-        self.use_tta         = True
+        self.use_tta         = False  # Disabled to save RAM on Railway
         self._load_model()
 
     # ── Public API ───────────────────────────────────────────
@@ -155,7 +155,7 @@ class DRGrader:
 
         tensor = _to_tensor(img, self.input_size)
         tensor = tensor.unsqueeze(0).to(self.device)   # (1, 3, H, W)
-        tensor.requires_grad_(True)
+        # tensor.requires_grad_(True)  # Disabled for memory constraints
         return tensor
 
     def grade(self, tensor: torch.Tensor) -> GradeResult:
@@ -186,7 +186,7 @@ class DRGrader:
         if self.use_tta:
             raw_score = self._tta_predict(tensor)
         else:
-            with torch.set_grad_enabled(True):
+            with torch.set_grad_enabled(False):
                 out = self.model(tensor)
             raw_score = float(out.detach().cpu().squeeze().item())
 
@@ -330,8 +330,23 @@ class DRGrader:
             return
 
         try:
+            logger.info("Importing timm...")
             import timm
-            state = torch.load(self.model_path, map_location=self.device)
+            import gc
+            
+            logger.info("Running pre-load garbage collection...")
+            gc.collect()
+
+            logger.info(f"Loading state dict from {self.model_path}...")
+            try:
+                # Try memory mapping first (saves 100MB+ RAM, but requires newer PyTorch zip format)
+                state = torch.load(self.model_path, map_location=self.device, mmap=True, weights_only=False)
+                logger.info("Successfully loaded state dict using mmap=True (memory mapped).")
+            except Exception as mmap_err:
+                logger.warning(f"Could not use mmap=True ({mmap_err}). Falling back to standard load.")
+                state = torch.load(self.model_path, map_location=self.device, weights_only=False)
+                
+            logger.info("State dict loaded. Building model architecture...")
 
             # Check if this is an ensemble bundle
             if isinstance(state, dict) and "folds" in state:
@@ -342,9 +357,15 @@ class DRGrader:
                 self.thresholds = np.sort(np.array(state.get("mean_thresholds", [0.6, 1.5, 2.5, 3.5]), dtype=np.float64))
 
                 self.ensemble_models = []
-                for f_info in state["folds"]:
+                max_models = int(os.getenv("MAX_ENSEMBLE_MODELS", "1" if os.getenv("RENDER") else "5"))
+                logger.info(f"Loading ensemble of {max_models} models...")
+                for i, f_info in enumerate(state["folds"]):
+                    if i >= max_models:
+                        break
+                    
                     m = timm.create_model(arch, pretrained=False, num_classes=1 if self.is_regression else NUM_CLASSES)
                     m.load_state_dict(f_info["state_dict"])
+                        
                     m.to(self.device)
                     m.eval()
                     self.ensemble_models.append(m)
@@ -385,8 +406,14 @@ class DRGrader:
                 if in_features == 2048:
                     arch = "efficientnet_b5"
 
+            self.input_size = 300  # Hardcoded memory hack for 512MB Railway instance (down from 456)
+            logger.warning(f"Low-RAM mode active: downscaling {arch} input to {self.input_size}px")
+
             # Build model and load weights
+            logger.info("Building model architecture...")
             model = timm.create_model(arch, pretrained=False, num_classes=num_classes)
+            
+            logger.info("Loading state dict into model...")
             model.load_state_dict(state)
             model.to(self.device)
             model.eval()
@@ -396,7 +423,11 @@ class DRGrader:
             self.ensemble_models = [model]
             self.is_regression   = is_regression
             self.arch            = arch
-            self.input_size      = _INPUT_SIZES.get(arch, 456)
+
+            # Free up memory explicitly to help prevent OOM on 512MB instances
+            del state
+            import gc
+            gc.collect()
 
             # Use clinical standard thresholds if checkpoint has extreme/skewed thresholds
             if thresholds is not None and max(thresholds) <= 4.0 and min(thresholds) >= 0.2:

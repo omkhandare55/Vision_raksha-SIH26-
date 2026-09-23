@@ -11,8 +11,14 @@
   "categories": ["medical", "health", "productivity"],
   "icons": [
     {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
       "src": "hero_illustration.jpg",
-      "sizes": "192x192 512x512",
+      "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"
     }

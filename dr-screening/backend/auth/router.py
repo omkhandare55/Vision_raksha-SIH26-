@@ -216,21 +216,14 @@ def me(user: TokenData = Depends(get_current_user)):
     }
 
 
-# ── POST /auth/refresh ─────────────────────────────────────────
-@router.post("/refresh", response_model=LoginResponse, summary="Extend session / refresh token")
-def refresh(user: TokenData = Depends(get_current_user)):
-    token = create_access_token(TokenData(
-        user_id = user.user_id,
-        role    = user.role,
-        phc_id  = user.phc_id,
-    ))
-    return LoginResponse(
-        access_token = token,
-        user_id      = user.user_id,
-        role         = user.role,
-        name         = user.user_id,
-        phc_id       = user.phc_id,
-    )
+# ── POST /auth/refresh ────────────────────────────────────────
+@router.post("/refresh", summary="Refresh JWT token")
+def refresh_token(user: TokenData = Depends(get_current_user)):
+    token = create_access_token(user)
+    return {
+        "access_token": token,
+        "token_type":   "bearer",
+    }
 
 
 # ── POST /auth/register-admin  (public — admin self sign-up) ──

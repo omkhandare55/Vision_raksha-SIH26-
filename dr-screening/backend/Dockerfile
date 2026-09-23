@@ -8,7 +8,8 @@ WORKDIR /app
 
 # System deps for opencv-headless
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libglib2.0-0 libgl1-mesa-glx \
+    libglib2.0-0 \
+    libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -23,9 +24,14 @@ COPY . .
 # Create storage and models dirs
 RUN mkdir -p models media/screenings reports
 
-EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1
 ENV ENVIRONMENT=production
+ENV HF_HUB_OFFLINE=1
+# Prevent glibc memory fragmentation (crucial for 512MB RAM limits)
+ENV MALLOC_ARENA_MAX=2
+ENV OMP_NUM_THREADS=1
+ENV OPENBLAS_NUM_THREADS=1
+ENV MKL_NUM_THREADS=1
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-7860}"]

@@ -8,7 +8,7 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Check for existing token on mount & listen for unauthorized 401 events
+  // Check for existing token on mount
   useEffect(() => {
     const token = localStorage.getItem("retinai_token");
     const saved = localStorage.getItem("retinai_user");
@@ -22,11 +22,12 @@ export function AuthProvider({ children }) {
     }
     setLoading(false);
 
-    const handleUnauthorized = () => {
+    // Listen for global JWT expiration events from Axios interceptor
+    const handleJwtExpired = () => {
       setUser(null);
     };
-    window.addEventListener("auth:unauthorized", handleUnauthorized);
-    return () => window.removeEventListener("auth:unauthorized", handleUnauthorized);
+    window.addEventListener("jwt-expired", handleJwtExpired);
+    return () => window.removeEventListener("jwt-expired", handleJwtExpired);
   }, []);
 
   const login = async (username, password) => {
