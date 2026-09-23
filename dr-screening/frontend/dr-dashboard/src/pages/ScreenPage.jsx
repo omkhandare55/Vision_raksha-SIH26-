@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { Loader2, UserPlus, WifiOff, Clock, ShieldCheck, HeartPulse, Eye, ArrowRight, Send, X, Download } from "lucide-react";
 import ImageCapture   from "../components/ImageCapture";
 import ResultSection  from "../components/ResultSection";
-import { analyseImage, validateScreening, createPatient, listDoctors, shareReport, getReportUrl } from "../utils/api";
+import { analyseImage, validateScreening, createPatient, listDoctors, shareReport, downloadReportPdf } from "../utils/api";
 import { enqueueImage, getPendingCount } from "../utils/offlineQueue";
 
 const STEPS = ["Patient Intake", "Fundus Import", "AI Diagnostic Report"];
@@ -40,6 +40,18 @@ export default function ScreenPage() {
   const [ashaNotes, setAshaNotes]     = useState("");
   const [sharing, setSharing]         = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownloadPdf = async (screeningId) => {
+    setDownloading(true);
+    try {
+      await downloadReportPdf(screeningId);
+    } catch (err) {
+      console.error("PDF download failed:", err);
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   useEffect(() => {
     getPendingCount().then(setPending).catch(() => {});
@@ -161,25 +173,25 @@ export default function ScreenPage() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-6">
+    <div className="max-w-3xl mx-auto p-4 sm:p-6 space-y-6">
       {/* ── Step Indicator ─────────────────────────────────── */}
-      <div className="flex items-center gap-2 mb-6 card-static p-4">
+      <div className="flex items-center gap-2 mb-6 card-static p-3 sm:p-4 overflow-x-auto">
         {STEPS.map((label, i) => (
-          <div key={label} className="flex items-center gap-2 flex-1">
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center text-xs font-bold transition-all
+          <div key={label} className="flex items-center gap-2 flex-1 min-w-max sm:min-w-0">
+            <div className={`w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center text-xs font-bold transition-all flex-shrink-0
               ${i < step  ? "bg-emerald-500 text-white"
               : i === step ? "bg-[#22AEB0] text-white ring-4 ring-[#22AEB0]/15 shadow-btn"
               : "bg-[#F7FAFB] text-[#94A1AB] border border-[#E1E9EC]"}`}>
               {i < step ? "✓" : i + 1}
             </div>
-            <span className={`text-xs md:text-sm font-semibold ${i === step ? "text-[#1F2F42]" : "text-[#94A1AB]"}`}>
+            <span className={`text-xs md:text-sm font-semibold whitespace-nowrap ${i === step ? "text-[#1F2F42]" : "text-[#94A1AB]"}`}>
               {label}
             </span>
-            {i < STEPS.length - 1 && <div className="flex-1 h-[2px] bg-[#E1E9EC]" />}
+            {i < STEPS.length - 1 && <div className="hidden sm:block flex-1 h-[2px] bg-[#E1E9EC] mx-1" />}
           </div>
         ))}
         {step > 0 && (
-          <button onClick={reset} className="text-xs text-[#94A1AB] hover:text-rose-600 font-semibold ml-2 transition bg-[#F7FAFB] hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-[#E1E9EC] cursor-pointer">
+          <button onClick={reset} className="text-xs text-[#94A1AB] hover:text-rose-600 font-semibold ml-2 transition bg-[#F7FAFB] hover:bg-rose-50 px-3 py-1.5 rounded-xl border border-[#E1E9EC] cursor-pointer flex-shrink-0">
             ↺ Reset
           </button>
         )}
@@ -428,15 +440,16 @@ export default function ScreenPage() {
             </div>
             <div className="flex items-center gap-2">
               {result?.screening_id && (
-                <a
-                  href={getReportUrl(result.screening_id)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline text-xs py-2 px-4 gap-2 no-underline"
+                <button
+                  onClick={() => handleDownloadPdf(result.screening_id)}
+                  disabled={downloading}
+                  className="btn-outline text-xs py-2 px-4 gap-2"
                 >
-                  <Download size={14} />
-                  Download PDF
-                </a>
+                  {downloading
+                    ? <div className="w-3.5 h-3.5 border-2 border-[#22AEB0]/30 border-t-[#22AEB0] rounded-full animate-spin" />
+                    : <Download size={14} />}
+                  {downloading ? "Generating…" : "Download PDF"}
+                </button>
               )}
               <button
                 onClick={openShareModal}

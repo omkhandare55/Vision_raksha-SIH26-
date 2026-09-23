@@ -18,10 +18,27 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// ── Response interceptor (handle errors globally) ────────────
+// ── Response interceptor (handle errors & retries for network resilience) ────
 api.interceptors.response.use(
   (res) => res,
-  (err) => {
+  async (err) => {
+    const config = err.config;
+
+    // Retry 5xx errors or network drops up to 2 times for GET requests
+    if (
+      config &&
+      !config._retry &&
+      config.method === "get" &&
+      (!err.response || (err.response.status >= 500 && err.response.status <= 599))
+    ) {
+      config._retry = (config._retry || 0) + 1;
+      if (config._retry <= 2) {
+        const delay = config._retry * 1000;
+        await new Promise((r) => setTimeout(r, delay));
+        return api(config);
+      }
+    }
+
     if (err.response?.status === 401 && !err.config?.url?.includes("/auth/login")) {
       localStorage.removeItem("retinai_token");
       localStorage.removeItem("retinai_user");
@@ -71,8 +88,26 @@ export const getPatient = async (id) => {
   return res.data;
 };
 
-export const getReportUrl = (screeningId) =>
-  `${API_BASE || ""}/api/report/${screeningId}`;
+export const getReportUrl = (screeningId) => {
+  const token = localStorage.getItem("retinai_token");
+  const base = `${API_BASE || ""}/api/report/${screeningId}`;
+  return token ? `${base}?token=${encodeURIComponent(token)}` : base;
+};
+
+export const downloadReportPdf = async (screeningId) => {
+  const res = await api.get(`/api/report/${screeningId}`, {
+    responseType: "blob",
+  });
+  const blob = new Blob([res.data], { type: "application/pdf" });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `VisionRaksha_Report_${screeningId}.pdf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  window.URL.revokeObjectURL(url);
+};
 
 export const liveDemo = async (file, caseIndex = 0) => {
   const form = new FormData();

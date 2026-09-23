@@ -13,7 +13,7 @@ import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Query
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from pydantic import BaseModel
 import bcrypt
@@ -85,16 +85,19 @@ def decode_token(token: str) -> TokenData:
 bearer_scheme = HTTPBearer(auto_error=False)
 
 def get_current_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme)
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(bearer_scheme),
+    token: Optional[str] = Query(None),
 ) -> TokenData:
-    """Dependency — inject into any route to require authentication."""
-    if credentials is None:
+    """Dependency — inject into any route to require authentication.
+    Accepts token via Authorization: Bearer header OR ?token= query parameter."""
+    token_str = credentials.credentials if credentials else token
+    if not token_str:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail={"error": "MISSING_TOKEN", "message": "Authorization header required"},
+            detail={"error": "MISSING_TOKEN", "message": "Authorization header or token parameter required"},
             headers={"WWW-Authenticate": "Bearer"},
         )
-    return decode_token(credentials.credentials)
+    return decode_token(token_str)
 
 def require_role(*roles: str):
     """Role-based access — usage: Depends(require_role('doctor','admin'))"""

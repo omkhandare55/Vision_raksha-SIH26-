@@ -59,24 +59,24 @@ export default function DashboardPage() {
   const gradePie = gradeBar.filter(d => d.value > 0);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6">
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">Analytics Dashboard</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#1F2F42] tracking-tight">Analytics Dashboard</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             VisionRaksha · Last updated {lastRefresh.toLocaleTimeString()}
           </p>
         </div>
-        <button onClick={fetch} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4">
+        <button onClick={fetch} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4 w-fit">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
         </button>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <KPICard
           icon={Users}
           label="Total Screened"

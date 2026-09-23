@@ -6,7 +6,7 @@ import {
   ClipboardList, Clock, CheckCircle, Send,
   RefreshCw, ChevronDown, ChevronUp, Eye, Download
 } from "lucide-react";
-import { getMyReports, getReportUrl } from "../utils/api";
+import { getMyReports, downloadReportPdf } from "../utils/api";
 
 const STATUS_META = {
   draft:          { label: "Draft",          icon: Clock,          color: "bg-gray-50 text-gray-600 border-gray-200",   dot: "bg-gray-400" },
@@ -27,6 +27,19 @@ export default function ReportsPage() {
   const [loading, setLoading]   = useState(true);
   const [expanded, setExpanded] = useState(null);
   const [filter, setFilter]     = useState("all");
+  const [downloading, setDownloading] = useState(null); // screening_id being downloaded
+
+  const handleDownloadPdf = async (screeningId, e) => {
+    e.stopPropagation();
+    setDownloading(screeningId);
+    try {
+      await downloadReportPdf(screeningId);
+    } catch (err) {
+      console.error("PDF download failed:", err);
+    } finally {
+      setDownloading(null);
+    }
+  };
 
   const fetchReports = async () => {
     setLoading(true);
@@ -186,17 +199,17 @@ export default function ReportsPage() {
                       <CheckCircle size={14} /> Doctor reviewed
                     </span>
                   )}
-                  <a
-                    href={getReportUrl(report.screening_id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition no-underline"
+                  <button
+                    onClick={(e) => handleDownloadPdf(report.screening_id, e)}
+                    disabled={downloading === report.screening_id}
+                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition cursor-pointer disabled:opacity-50"
                     title="Download PDF Report"
                   >
-                    <Download size={13} />
-                    <span className="hidden sm:inline">PDF</span>
-                  </a>
+                    {downloading === report.screening_id
+                      ? <div className="w-3 h-3 border-2 border-[#22AEB0]/30 border-t-[#22AEB0] rounded-full animate-spin" />
+                      : <Download size={13} />}
+                    <span className="hidden sm:inline">{downloading === report.screening_id ? "…" : "PDF"}</span>
+                  </button>
                   {isExpanded ? <ChevronUp size={18} className="text-[#94A1AB]" /> : <ChevronDown size={18} className="text-[#94A1AB]" />}
                 </div>
               </div>

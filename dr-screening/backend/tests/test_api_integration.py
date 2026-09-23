@@ -292,6 +292,16 @@ class TestReport:
         assert r.status_code == 200
         assert r.headers["content-type"] == "application/pdf"
 
+    def test_report_with_query_token_returns_pdf(self, raw_client, client, validated_id):
+        # Obtain token
+        r_auth = raw_client.post("/auth/login", data={"username": "asha_user", "password": "password123"})
+        token = r_auth.json()["access_token"]
+        # Query with token in URL parameter without Authorization header
+        r = raw_client.get(f"/api/report/{validated_id}?token={token}")
+        assert r.status_code == 200
+        assert r.headers["content-type"] == "application/pdf"
+        assert len(r.content) > 500
+
     def test_report_is_non_empty(self, client, validated_id):
         r = client.get(f"/api/report/{validated_id}")
         assert len(r.content) > 500
