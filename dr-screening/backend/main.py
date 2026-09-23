@@ -52,6 +52,13 @@ async def lifespan(app: FastAPI):
         if os.path.exists(alt_path):
             model_path = alt_path
 
+    # Fix Git LFS pointer issue in cloud builds:
+    # If the file exists but is very small (< 1MB), it's likely a Git LFS pointer, not the actual weights.
+    # Delete it so the auto-downloader can fetch the real model.
+    if os.path.exists(model_path) and os.path.getsize(model_path) < 1024 * 1024:
+        logger.warning(f"Model file {model_path} is suspiciously small ({os.path.getsize(model_path)} bytes). It might be a Git LFS pointer. Removing it to trigger download.")
+        os.remove(model_path)
+
     # Optional cloud auto-download (e.g. Render / Cloud Run)
     download_url = os.getenv("MODEL_DOWNLOAD_URL") or os.getenv("MODEL_URL")
     if not os.path.exists(model_path) and download_url:
@@ -173,9 +180,15 @@ async def serve_spa(full_path: str):
         target_file = os.path.join(dist_dir, full_path)
         if full_path and os.path.exists(target_file) and os.path.isfile(target_file):
             return FileResponse(target_file)
+        
+        # If it's explicitly requesting an asset that's missing, don't return index.html
+        if full_path.endswith((".ico", ".png", ".jpg", ".svg", ".js", ".css", ".json")):
+            return JSONResponse(status_code=404, content={"error": "NOT_FOUND", "message": "Asset not found"})
+            
         index_file = os.path.join(dist_dir, "index.html")
         if os.path.exists(index_file):
             return FileResponse(index_file)
+            
     if not full_path or full_path == "/":
         return {"status": "ok", "message": "RetinAI API running. Frontend not built."}
     return JSONResponse(status_code=404, content={"error": "NOT_FOUND", "message": "Resource not found"})
