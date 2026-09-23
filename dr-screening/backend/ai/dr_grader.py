@@ -187,7 +187,7 @@ class DRGrader:
         if self.use_tta:
             raw_score = self._tta_predict(tensor)
         else:
-            import os
+    
             with torch.set_grad_enabled(os.getenv("DISABLE_GRADCAM") != "1"):
                 out = self.model(tensor)
             raw_score = float(out.detach().cpu().squeeze().item())
@@ -409,7 +409,7 @@ class DRGrader:
                     arch = "efficientnet_b5"
 
             self.input_size = _INPUT_SIZES.get(arch, 456)
-            import os
+    
             if os.getenv("DISABLE_GRADCAM") == "1":
                 # 🚨 EMERGENCY MEMORY HACK for 512MB RAM instances 🚨
                 # Downscale input from 456x456 to 300x300.
