@@ -133,14 +133,14 @@ export default function AdminPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="d-flex align-items-center justify-content-between">
         <div>
           <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">User Management</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Create and manage ASHA worker and doctor accounts
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="d-flex gap-2">
           <button onClick={fetchUsers} disabled={loading} className="btn-outline gap-2 text-xs py-2.5 px-4">
             <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
             Refresh
@@ -153,7 +153,7 @@ export default function AdminPage() {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="row g-4">
         {[
           { role: "asha",   label: "ASHA Workers", color: "text-[#22AEB0]", bg: "bg-[#E8F7F6]" },
           { role: "doctor", label: "Doctors",      color: "text-blue-600",  bg: "bg-blue-50"   },
@@ -161,13 +161,15 @@ export default function AdminPage() {
         ].map(({ role, label, color, bg }) => {
           const count = users.filter(u => u.role === role || (role === "asha" && u.role === "field_worker")).length;
           return (
-            <div key={role} className={`card-static p-5 flex items-center gap-4`}>
-              <div className={`p-3 rounded-xl ${bg}`}>
-                <Users size={20} className={color} />
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-[#1F2F42]">{count}</p>
-                <p className="text-xs font-semibold text-[#657685]">{label}</p>
+            <div key={role} className="col-12 col-md-4">
+              <div className={`card-static p-5 d-flex align-items-center gap-4`}>
+                <div className={`p-3 rounded-xl ${bg}`}>
+                  <Users size={20} className={color} />
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-[#1F2F42]">{count}</p>
+                  <p className="text-xs font-semibold text-[#657685]">{label}</p>
+                </div>
               </div>
             </div>
           );
@@ -185,7 +187,7 @@ export default function AdminPage() {
               <X size={20} />
             </button>
 
-            <div className="flex items-center gap-3 mb-6">
+            <div className="d-flex align-items-center gap-3 mb-6">
               <div className="p-2.5 bg-[#E8F7F6] rounded-xl">
                 {editUser ? <Edit2 size={20} className="text-[#22AEB0]" /> : <UserPlus size={20} className="text-[#22AEB0]" />}
               </div>
@@ -200,8 +202,8 @@ export default function AdminPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
-                <div>
+              <div className="row g-3">
+                <div className="col-12 col-md-6">
                   <label className="block text-xs font-semibold text-[#657685] mb-1.5">Full Name *</label>
                   <input
                     className="input-themed"
@@ -211,7 +213,7 @@ export default function AdminPage() {
                     required
                   />
                 </div>
-                <div>
+                <div className="col-12 col-md-6">
                   <label className="block text-xs font-semibold text-[#657685] mb-1.5">Role *</label>
                   <select
                     className="input-themed"
@@ -276,7 +278,7 @@ export default function AdminPage() {
               {/* Credentials preview for new users */}
               {!editUser && form.username && form.password && (
                 <div className="bg-[#E8F7F6] border border-[#22AEB0]/20 rounded-xl p-4">
-                  <p className="text-xs font-bold text-[#1F2F42] mb-2 flex items-center gap-1.5">
+                  <p className="text-xs font-bold text-[#1F2F42] mb-2 d-flex align-items-center gap-2">
                     <ShieldCheck size={13} className="text-[#22AEB0]" />
                     Credentials to share with user
                   </p>
@@ -289,7 +291,7 @@ export default function AdminPage() {
                 </div>
               )}
 
-              <div className="flex gap-3 pt-2">
+              <div className="d-flex gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowForm(false)}
@@ -316,7 +318,7 @@ export default function AdminPage() {
 
       {/* Users Table */}
       <div className="card-static overflow-hidden">
-        <div className="px-5 py-4 border-b border-[#E1E9EC] flex items-center gap-2">
+        <div className="px-5 py-4 border-b border-[#E1E9EC] d-flex align-items-center gap-2">
           <Users size={18} className="text-[#22AEB0]" />
           <h2 className="font-bold text-[#1F2F42] text-sm">All Accounts</h2>
           <span className="ml-auto text-xs text-[#94A1AB] font-medium">{users.length} users</span>
@@ -330,7 +332,7 @@ export default function AdminPage() {
             <p className="text-sm text-[#94A1AB] font-medium">No accounts yet. Create the first one!</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <div className="table-responsive">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-[#E1E9EC] bg-[#F7FAFB]">
@@ -349,8 +351,8 @@ export default function AdminPage() {
                     className={`border-b border-[#F7FAFB] hover:bg-[#F7FAFB] transition-colors ${!u.is_active ? "opacity-50" : ""}`}
                   >
                     <td className="px-5 py-3.5">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-xl bg-[#22AEB0]/10 flex items-center justify-center text-[#22AEB0] text-xs font-bold flex-shrink-0">
+                      <div className="d-flex align-items-center gap-3">
+                        <div className="w-8 h-8 rounded-xl bg-[#22AEB0]/10 d-flex align-items-center justify-content-center text-[#22AEB0] text-xs font-bold flex-shrink-0">
                           {u.name.charAt(0).toUpperCase()}
                         </div>
                         <span className="font-semibold text-[#1F2F42]">{u.name}</span>
@@ -370,7 +372,7 @@ export default function AdminPage() {
                     </td>
                     <td className="px-5 py-3.5 text-xs text-[#94A1AB]">{u.phc_id || "—"}</td>
                     <td className="px-5 py-3.5">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="d-flex align-items-center justify-content-end gap-2">
                         <button
                           onClick={() => openEditForm(u)}
                           className="p-2 text-[#657685] hover:text-[#22AEB0] hover:bg-[#E8F7F6] rounded-lg transition cursor-pointer"

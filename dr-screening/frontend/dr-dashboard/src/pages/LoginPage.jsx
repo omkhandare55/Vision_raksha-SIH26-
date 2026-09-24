@@ -113,8 +113,10 @@ export default function LoginPage() {
       <div className="absolute top-20 left-1/4 w-96 h-96 bg-[#22AEB0]/20 rounded-full blur-3xl pointer-events-none z-0" />
       <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-[#38C4C4]/20 rounded-full blur-3xl pointer-events-none z-0" />
 
-      <div className="w-full max-w-md z-10">
-        {/* Logo */}
+      <div className="container z-10">
+        <div className="row justify-content-center">
+          <div className="col-12 col-md-8 col-lg-6 col-xl-5 mx-auto">
+            {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="p-3.5 bg-[#22AEB0]/15 rounded-2xl backdrop-blur-md border border-[#22AEB0]/20 shadow-lg">
@@ -335,6 +337,8 @@ export default function LoginPage() {
             )}
 
           </div>
+        </div>
+        </div>
         </div>
       </div>
     </div>

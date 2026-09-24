@@ -103,82 +103,85 @@ function AuthenticatedApp() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F7FAFB]">
       {/* ── Top Navigation Bar ── */}
-      <nav className="sticky top-0 z-50 bg-[#1F2F42] shadow-nav">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+      <nav className="navbar navbar-expand-lg sticky-top z-50 bg-[#1F2F42] shadow-nav px-0">
+        <div className="container-fluid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="d-flex align-items-center justify-content-between w-100 h-16">
 
             {/* Left: Logo */}
-            <NavLink to="/dashboard" className="flex items-center gap-3 flex-shrink-0 cursor-pointer">
+            <NavLink to="/dashboard" className="navbar-brand d-flex align-items-center gap-3 flex-shrink-0 cursor-pointer p-0 m-0">
               <VRLogo size={36} />
-              <div className="hidden sm:block">
-                <h1 className="text-white font-bold text-lg leading-tight tracking-wide">
+              <div className="d-none d-sm-block">
+                <h1 className="text-white fw-bold fs-5 lh-sm tracking-wide mb-0">
                   Vision<span className="text-[#22AEB0]">Raksha</span>
                 </h1>
-                <p className="text-[#76D6D2] text-[10px] font-medium tracking-wider uppercase leading-none">
+                <p className="text-[#76D6D2] text-[10px] fw-medium tracking-wider text-uppercase lh-1 mb-0">
                   AI for Healthier Tomorrows
                 </p>
               </div>
             </NavLink>
 
             {/* Center: Nav Links (desktop) */}
-            <div className="hidden md:flex items-center gap-1">
-              {navItems.map(({ to, icon: Icon, label }) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  end={to === "/dashboard"}
-                  className={({ isActive }) =>
-                    `flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
-                     ${isActive
-                       ? "text-[#22AEB0] bg-white/10 nav-active"
-                       : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
-                  }
-                >
-                  <Icon size={16} />
-                  {label}
-                </NavLink>
-              ))}
+            <div className="collapse navbar-collapse d-none d-md-flex justify-content-center">
+              <ul className="navbar-nav gap-2">
+                {navItems.map(({ to, icon: Icon, label }) => (
+                  <li className="nav-item" key={to}>
+                    <NavLink
+                      to={to}
+                      end={to === "/dashboard"}
+                      className={({ isActive }) =>
+                        `nav-link d-flex align-items-center gap-2 px-3 py-2 rounded text-sm fw-medium transition-all duration-200
+                         ${isActive
+                           ? "text-[#22AEB0] bg-white/10 nav-active"
+                           : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
+                      }
+                    >
+                      <Icon size={16} />
+                      {label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             {/* Right: Status + Profile */}
-            <div className="flex items-center gap-3">
+            <div className="d-flex align-items-center gap-3">
               {online
-                ? <span className="hidden sm:flex items-center gap-1.5 text-xs text-emerald-400 font-medium bg-emerald-400/10 px-3 py-1.5 rounded-lg">
+                ? <span className="d-none d-sm-flex align-items-center gap-2 text-xs text-emerald-400 fw-medium bg-emerald-400/10 px-3 py-2 rounded">
                     <Wifi size={12} /> Online
                   </span>
-                : <span className="hidden sm:flex items-center gap-1.5 text-xs text-amber-400 font-medium bg-amber-400/10 px-3 py-1.5 rounded-lg">
+                : <span className="d-none d-sm-flex align-items-center gap-2 text-xs text-amber-400 fw-medium bg-amber-400/10 px-3 py-2 rounded">
                     <WifiOff size={12} /> Offline
                   </span>
               }
 
               <NotificationPanel />
 
-              <div className="relative">
+              <div className="position-relative">
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center gap-2 text-white hover:bg-white/5 px-3 py-2 rounded-lg transition cursor-pointer"
+                  className="btn d-flex align-items-center gap-2 text-white hover:bg-white/5 px-2 py-1 rounded transition cursor-pointer border-0 shadow-none"
                 >
-                  <div className="w-8 h-8 rounded-full bg-[#22AEB0] flex items-center justify-center text-white text-xs font-bold">
+                  <div className="rounded-circle bg-[#22AEB0] d-flex align-items-center justify-content-center text-white text-xs fw-bold" style={{ width: '32px', height: '32px' }}>
                     {displayName.charAt(0).toUpperCase()}
                   </div>
-                  <div className="hidden sm:block text-left">
-                    <p className="text-sm font-semibold text-white leading-tight">{displayName}</p>
-                    <p className="text-[10px] text-[#76D6D2]">{roleBadge.label}</p>
+                  <div className="d-none d-sm-block text-start">
+                    <p className="text-sm fw-semibold text-white lh-1 mb-1">{displayName}</p>
+                    <p className="text-[10px] text-[#76D6D2] mb-0">{roleBadge.label}</p>
                   </div>
                   <ChevronDown size={14} className="text-[#94A1AB]" />
                 </button>
 
                 {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-[#E1E9EC] py-2 z-50">
-                    <div className="px-4 py-2 border-b border-[#E1E9EC]">
-                      <p className="text-sm font-semibold text-[#263746]">{displayName}</p>
-                      <span className={`inline-block text-[10px] font-semibold px-2 py-0.5 rounded-full mt-1 ${roleBadge.color}`}>
+                  <div className="position-absolute end-0 mt-2 bg-white rounded shadow border border-[#E1E9EC] py-2 z-50" style={{ width: '12rem' }}>
+                    <div className="px-3 py-2 border-bottom border-[#E1E9EC]">
+                      <p className="text-sm fw-semibold text-[#263746] mb-0">{displayName}</p>
+                      <span className={`d-inline-block text-[10px] fw-semibold px-2 py-1 rounded-pill mt-1 ${roleBadge.color}`}>
                         {roleBadge.label}
                       </span>
                     </div>
                     <button
                       onClick={logout}
-                      className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-rose-600 hover:bg-rose-50 transition cursor-pointer"
+                      className="btn w-100 d-flex align-items-center gap-2 px-3 py-2 text-sm text-danger hover:bg-rose-50 transition cursor-pointer border-0 text-start rounded-0"
                     >
                       <LogOut size={14} />
                       Sign Out
@@ -188,8 +191,9 @@ function AuthenticatedApp() {
               </div>
 
               <button
-                className="md:hidden text-[#94A1AB] hover:text-white p-2"
+                className="btn d-md-none text-[#94A1AB] hover:text-white p-2 border-0 shadow-none"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                type="button"
               >
                 {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
               </button>
@@ -198,23 +202,26 @@ function AuthenticatedApp() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#26394D] border-t border-white/10 px-4 py-3 space-y-1">
-            {navItems.map(({ to, icon: Icon, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                end={to === "/dashboard"}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all
-                   ${isActive
-                     ? "text-[#22AEB0] bg-[#22AEB0]/10"
-                     : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
-                }
-              >
-                <Icon size={18} />
-                {label}
-              </NavLink>
-            ))}
+          <div className="d-md-none bg-[#26394D] border-top border-white/10 px-3 py-3 w-100">
+            <ul className="navbar-nav gap-2 m-0 p-0">
+              {navItems.map(({ to, icon: Icon, label }) => (
+                <li className="nav-item" key={to}>
+                  <NavLink
+                    to={to}
+                    end={to === "/dashboard"}
+                    className={({ isActive }) =>
+                      `nav-link d-flex align-items-center gap-3 px-3 py-2 rounded text-sm fw-medium transition-all
+                       ${isActive
+                         ? "text-[#22AEB0] bg-[#22AEB0]/10"
+                         : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
+                    }
+                  >
+                    <Icon size={18} />
+                    {label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </nav>
@@ -253,25 +260,27 @@ function AuthenticatedApp() {
 /* ── Public Nav Bar (for non-authenticated users) ── */
 function PublicNav() {
   return (
-    <nav className="sticky top-0 z-50 bg-[#1F2F42] shadow-nav">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center gap-3">
+    <nav className="navbar navbar-expand-md sticky-top z-50 bg-[#1F2F42] shadow-nav px-0 py-2">
+      <div className="container-fluid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="d-flex align-items-center justify-content-between w-100 h-16">
+          <div className="d-flex align-items-center gap-3">
             <VRLogo size={36} />
             <div>
-              <h1 className="text-white font-bold text-lg leading-tight tracking-wide">
+              <h1 className="text-white fw-bold fs-5 lh-sm tracking-wide mb-0">
                 Vision<span className="text-[#22AEB0]">Raksha</span>
               </h1>
-              <p className="text-[#76D6D2] text-[10px] font-medium tracking-wider uppercase leading-none">
+              <p className="text-[#76D6D2] text-[10px] fw-medium tracking-wider text-uppercase lh-1 mb-0">
                 AI for Healthier Tomorrows
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <a href="#features" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">Features</a>
-            <a href="#workflow" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">How It Works</a>
-            <a href="#about" className="hidden sm:block text-sm text-[#94A1AB] hover:text-white transition font-medium">About</a>
-            <NavLink to="/login" className="btn-primary text-xs py-2 px-5 ml-2">
+          <div className="d-flex align-items-center gap-3">
+            <div className="collapse navbar-collapse d-none d-md-flex gap-3">
+              <a href="#features" className="nav-link text-sm text-[#94A1AB] hover:text-white transition fw-medium">Features</a>
+              <a href="#workflow" className="nav-link text-sm text-[#94A1AB] hover:text-white transition fw-medium">How It Works</a>
+              <a href="#about" className="nav-link text-sm text-[#94A1AB] hover:text-white transition fw-medium">About</a>
+            </div>
+            <NavLink to="/login" className="btn btn-primary text-xs py-2 px-4 ms-2 rounded">
               Sign In
             </NavLink>
           </div>

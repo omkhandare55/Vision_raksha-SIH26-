@@ -103,40 +103,46 @@ export default function DoctorReviewPage() {
       )}
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="d-flex align-items-center justify-content-between">
         <div>
           <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">Review Queue</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Reports shared by ASHA workers awaiting your clinical review
           </p>
         </div>
-        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4">
+        <button onClick={fetchReports} disabled={loading} className="btn-primary d-flex align-items-center gap-2 text-xs py-2.5 px-4">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="card-static p-4 flex items-center gap-3">
-          <div className="p-2.5 bg-amber-50 rounded-xl"><Clock size={18} className="text-amber-500" /></div>
-          <div>
-            <p className="text-xl font-bold text-[#1F2F42]">{reports.length}</p>
-            <p className="text-xs text-[#657685] font-semibold">Pending Review</p>
+      <div className="row g-4">
+        <div className="col-12 col-md-4">
+          <div className="card-static p-4 d-flex align-items-center gap-3">
+            <div className="p-2.5 bg-amber-50 rounded-xl"><Clock size={18} className="text-amber-500" /></div>
+            <div>
+              <p className="text-xl font-bold text-[#1F2F42]">{reports.length}</p>
+              <p className="text-xs text-[#657685] font-semibold">Pending Review</p>
+            </div>
           </div>
         </div>
-        <div className="card-static p-4 flex items-center gap-3">
-          <div className="p-2.5 bg-rose-50 rounded-xl"><AlertTriangle size={18} className="text-rose-500" /></div>
-          <div>
-            <p className="text-xl font-bold text-[#1F2F42]">{reports.filter(r => r.grade >= 3).length}</p>
-            <p className="text-xs text-[#657685] font-semibold">High Severity</p>
+        <div className="col-12 col-md-4">
+          <div className="card-static p-4 d-flex align-items-center gap-3">
+            <div className="p-2.5 bg-rose-50 rounded-xl"><AlertTriangle size={18} className="text-rose-500" /></div>
+            <div>
+              <p className="text-xl font-bold text-[#1F2F42]">{reports.filter(r => r.grade >= 3).length}</p>
+              <p className="text-xs text-[#657685] font-semibold">High Severity</p>
+            </div>
           </div>
         </div>
-        <div className="card-static p-4 flex items-center gap-3">
-          <div className="p-2.5 bg-[#E8F7F6] rounded-xl"><ClipboardList size={18} className="text-[#22AEB0]" /></div>
-          <div>
-            <p className="text-xl font-bold text-[#1F2F42]">{reports.filter(r => r.grade >= 2).length}</p>
-            <p className="text-xs text-[#657685] font-semibold">Referral Needed</p>
+        <div className="col-12 col-md-4">
+          <div className="card-static p-4 d-flex align-items-center gap-3">
+            <div className="p-2.5 bg-[#E8F7F6] rounded-xl"><ClipboardList size={18} className="text-[#22AEB0]" /></div>
+            <div>
+              <p className="text-xl font-bold text-[#1F2F42]">{reports.filter(r => r.grade >= 2).length}</p>
+              <p className="text-xs text-[#657685] font-semibold">Referral Needed</p>
+            </div>
           </div>
         </div>
       </div>
@@ -155,9 +161,9 @@ export default function DoctorReviewPage() {
         <div className="space-y-3">
           {[1,2,3].map(i => (
             <div key={i} className="card-static p-5 animate-pulse">
-              <div className="flex gap-4">
+              <div className="d-flex gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#E1E9EC]" />
-                <div className="flex-1 space-y-2">
+                <div className="flex-grow-1 space-y-2">
                   <div className="h-4 w-1/3 bg-[#E1E9EC] rounded" />
                   <div className="h-3 w-1/2 bg-[#E1E9EC] rounded" />
                 </div>
@@ -181,17 +187,17 @@ export default function DoctorReviewPage() {
             >
               {/* Card Header */}
               <div
-                className="p-5 flex items-start justify-between cursor-pointer hover:bg-[#F7FAFB] transition-colors"
+                className="p-5 d-flex align-items-start justify-content-between cursor-pointer hover:bg-[#F7FAFB] transition-colors"
                 onClick={() => setExpanded(isExpanded ? null : report.screening_id)}
               >
-                <div className="flex items-start gap-4">
+                <div className="d-flex align-items-start gap-4">
                   {/* Grade badge */}
                   <div className={`px-3 py-1.5 rounded-xl text-xs font-bold border flex-shrink-0 ${GRADE_COLOR[report.grade] ?? GRADE_COLOR[0]}`}>
                     G{report.grade}
                   </div>
 
                   <div>
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="d-flex align-items-center gap-2 flex-wrap">
                       <span className="font-bold text-[#1F2F42]">{report.patient_name}</span>
                       {report.patient_age && (
                         <span className="text-xs text-[#94A1AB]">
@@ -213,8 +219,8 @@ export default function DoctorReviewPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className="hidden sm:inline text-xs text-amber-600 font-semibold bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
+                <div className="d-flex align-items-center gap-2 flex-shrink-0">
+                  <span className="d-none d-sm-inline text-xs text-amber-600 font-semibold bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full">
                     ⏳ Pending Review
                   </span>
                   {isExpanded ? <ChevronUp size={18} className="text-[#94A1AB]" /> : <ChevronDown size={18} className="text-[#94A1AB]" />}
@@ -226,10 +232,10 @@ export default function DoctorReviewPage() {
                 <div className="border-t border-[#E1E9EC] p-6 space-y-5 bg-[#FAFCFD]">
                   {/* Images */}
                   {(report.image_url || report.heatmap_url) && (
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="row g-3">
                       {report.image_url && (
-                        <div>
-                          <p className="text-xs font-semibold text-[#657685] mb-2 flex items-center gap-1.5">
+                        <div className="col-12 col-sm-6">
+                          <p className="text-xs font-semibold text-[#657685] mb-2 d-flex align-items-center gap-2">
                             <Eye size={12} /> Fundus Image
                           </p>
                           <img
@@ -240,7 +246,7 @@ export default function DoctorReviewPage() {
                         </div>
                       )}
                       {report.heatmap_url && (
-                        <div>
+                        <div className="col-12 col-sm-6">
                           <p className="text-xs font-semibold text-[#657685] mb-2">🔥 Grad-CAM Heatmap</p>
                           <img
                             src={report.heatmap_url}
@@ -258,7 +264,7 @@ export default function DoctorReviewPage() {
                       <p className="text-xs font-bold text-[#1F2F42] mb-2">🤖 AI Findings</p>
                       <ul className="space-y-1">
                         {report.findings.map((f, i) => (
-                          <li key={i} className="text-xs text-[#657685] flex items-start gap-1.5">
+                          <li key={i} className="text-xs text-[#657685] d-flex align-items-start gap-2">
                             <span className="text-[#22AEB0] font-bold mt-0.5">•</span>
                             {f}
                           </li>
@@ -269,7 +275,7 @@ export default function DoctorReviewPage() {
 
                   {/* Review Form */}
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-[#1F2F42] flex items-center gap-2">
+                    <h3 className="text-sm font-bold text-[#1F2F42] d-flex align-items-center gap-2">
                       <ClipboardList size={16} className="text-[#22AEB0]" />
                       Your Clinical Review
                     </h3>
@@ -277,20 +283,21 @@ export default function DoctorReviewPage() {
                     {/* Confirmed Grade */}
                     <div>
                       <label className="block text-xs font-semibold text-[#657685] mb-2">Confirmed DR Grade *</label>
-                      <div className="grid grid-cols-1 sm:grid-cols-5 gap-2">
+                      <div className="row g-2">
                         {GRADE_OPTIONS.map(opt => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => updateForm(report.screening_id, "confirmed_grade", opt.value)}
-                            className={`px-3 py-2.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-left
-                              ${form.confirmed_grade === opt.value
-                                ? "bg-[#22AEB0] text-white border-[#22AEB0] shadow-btn"
-                                : "bg-white text-[#657685] border-[#E1E9EC] hover:border-[#22AEB0]/50"}`}
-                          >
-                            Grade {opt.value}
-                            <span className="block text-[10px] opacity-75 font-normal">{opt.label.split(" — ")[1]}</span>
-                          </button>
+                          <div key={opt.value} className="col-12 col-sm">
+                            <button
+                              type="button"
+                              onClick={() => updateForm(report.screening_id, "confirmed_grade", opt.value)}
+                              className={`w-full px-3 py-2.5 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-left
+                                ${form.confirmed_grade === opt.value
+                                  ? "bg-[#22AEB0] text-white border-[#22AEB0] shadow-btn"
+                                  : "bg-white text-[#657685] border-[#E1E9EC] hover:border-[#22AEB0]/50"}`}
+                            >
+                              Grade {opt.value}
+                              <span className="block text-[10px] opacity-75 font-normal">{opt.label.split(" — ")[1]}</span>
+                            </button>
+                          </div>
                         ))}
                       </div>
                     </div>
@@ -324,21 +331,22 @@ export default function DoctorReviewPage() {
                     {/* Urgency */}
                     <div>
                       <label className="block text-xs font-semibold text-[#657685] mb-2">Urgency Level *</label>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="row g-2">
                         {URGENCY_OPTIONS.map(opt => (
-                          <button
-                            key={opt.value}
-                            type="button"
-                            onClick={() => updateForm(report.screening_id, "urgency", opt.value)}
-                            className={`px-3 py-3 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-left
-                              ${form.urgency === opt.value
-                                ? "bg-[#22AEB0] text-white border-[#22AEB0] shadow-btn"
-                                : "bg-white text-[#657685] border-[#E1E9EC] hover:border-[#22AEB0]/50"}`}
-                          >
-                            <span className="text-base block mb-0.5">{opt.icon}</span>
-                            {opt.label}
-                            <span className="block text-[10px] opacity-75 font-normal mt-0.5">{opt.desc}</span>
-                          </button>
+                          <div key={opt.value} className="col-12 col-sm-4">
+                            <button
+                              type="button"
+                              onClick={() => updateForm(report.screening_id, "urgency", opt.value)}
+                              className={`w-full px-3 py-3 text-xs font-semibold rounded-xl border transition-all cursor-pointer text-left
+                                ${form.urgency === opt.value
+                                  ? "bg-[#22AEB0] text-white border-[#22AEB0] shadow-btn"
+                                  : "bg-white text-[#657685] border-[#E1E9EC] hover:border-[#22AEB0]/50"}`}
+                            >
+                              <span className="text-base block mb-0.5">{opt.icon}</span>
+                              {opt.label}
+                              <span className="block text-[10px] opacity-75 font-normal mt-0.5">{opt.desc}</span>
+                            </button>
+                          </div>
                         ))}
                       </div>
                     </div>

@@ -56,37 +56,43 @@ export default function ReportsPage() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="d-flex align-items-center justify-content-between">
         <div>
           <h1 className="text-2xl font-bold text-[#1F2F42] tracking-tight">My Reports</h1>
           <p className="text-xs text-[#94A1AB] font-medium mt-0.5">
             Track your screening reports and doctor reviews
           </p>
         </div>
-        <button onClick={fetchReports} disabled={loading} className="btn-primary gap-2 text-xs py-2.5 px-4">
+        <button onClick={fetchReports} disabled={loading} className="btn-primary d-flex align-items-center gap-2 text-xs py-2.5 px-4">
           <RefreshCw size={14} className={loading ? "animate-spin" : ""} />
           Refresh
         </button>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
-        <div className="card-static p-4 text-center">
-          <p className="text-2xl font-bold text-[#22AEB0]">{counts.all}</p>
-          <p className="text-xs text-[#657685] font-semibold mt-0.5">Total Reports</p>
+      <div className="row g-4">
+        <div className="col-12 col-md-4">
+          <div className="card-static p-4 text-center">
+            <p className="text-2xl font-bold text-[#22AEB0]">{counts.all}</p>
+            <p className="text-xs text-[#657685] font-semibold mt-0.5">Total Reports</p>
+          </div>
         </div>
-        <div className="card-static p-4 text-center">
-          <p className="text-2xl font-bold text-amber-500">{counts.pending_review}</p>
-          <p className="text-xs text-[#657685] font-semibold mt-0.5">Awaiting Doctor</p>
+        <div className="col-12 col-md-4">
+          <div className="card-static p-4 text-center">
+            <p className="text-2xl font-bold text-amber-500">{counts.pending_review}</p>
+            <p className="text-xs text-[#657685] font-semibold mt-0.5">Awaiting Doctor</p>
+          </div>
         </div>
-        <div className="card-static p-4 text-center">
-          <p className="text-2xl font-bold text-emerald-500">{counts.reviewed}</p>
-          <p className="text-xs text-[#657685] font-semibold mt-0.5">Doctor Reviewed</p>
+        <div className="col-12 col-md-4">
+          <div className="card-static p-4 text-center">
+            <p className="text-2xl font-bold text-emerald-500">{counts.reviewed}</p>
+            <p className="text-xs text-[#657685] font-semibold mt-0.5">Doctor Reviewed</p>
+          </div>
         </div>
       </div>
 
       {/* Filter tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-1">
+      <div className="d-flex gap-2 overflow-x-auto pb-1">
         {[
           { key: "all",            label: "All Reports"     },
           { key: "reviewed",       label: "✅ Reviewed"     },
@@ -129,9 +135,9 @@ export default function ReportsPage() {
         <div className="space-y-3">
           {[1,2,3].map(i => (
             <div key={i} className="card-static p-5 animate-pulse">
-              <div className="flex gap-4">
+              <div className="d-flex gap-4">
                 <div className="w-12 h-12 rounded-xl bg-[#E1E9EC]" />
-                <div className="flex-1 space-y-2">
+                <div className="flex-grow-1 space-y-2">
                   <div className="h-4 w-1/3 bg-[#E1E9EC] rounded" />
                   <div className="h-3 w-1/2 bg-[#E1E9EC] rounded" />
                 </div>
@@ -157,15 +163,15 @@ export default function ReportsPage() {
             >
               {/* Card Header */}
               <div
-                className="p-5 flex items-start justify-between cursor-pointer hover:bg-[#F7FAFB] transition-colors"
+                className="p-5 d-flex align-items-start justify-content-between cursor-pointer hover:bg-[#F7FAFB] transition-colors"
                 onClick={() => setExpanded(isExpanded ? null : report.screening_id)}
               >
-                <div className="flex items-start gap-4">
+                <div className="d-flex align-items-start gap-4">
                   <div className={`px-3 py-1.5 rounded-xl text-xs font-bold border flex-shrink-0 ${GRADE_COLORS[report.grade] ?? GRADE_COLORS[0]}`}>
                     G{report.grade}
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 flex-wrap">
+                    <div className="d-flex align-items-center gap-2 flex-wrap">
                       <span className="font-bold text-[#1F2F42]">{report.patient_name}</span>
                       {report.patient_age && (
                         <span className="text-xs text-[#94A1AB]">{report.patient_age}y</span>
@@ -181,19 +187,19 @@ export default function ReportsPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="d-flex align-items-center gap-2">
                   {report.report_status === "reviewed" && (
-                    <span className="hidden sm:flex items-center gap-1 text-xs font-semibold text-[#22AEB0]">
+                    <span className="d-none d-sm-flex align-items-center gap-1 text-xs font-semibold text-[#22AEB0]">
                       <CheckCircle size={14} /> Doctor reviewed
                     </span>
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); downloadReport(report.screening_id); }}
-                    className="flex items-center gap-1.5 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition cursor-pointer"
+                    className="d-flex align-items-center gap-2 text-xs font-semibold text-[#657685] hover:text-[#22AEB0] bg-[#F7FAFB] hover:bg-[#E8F7F6] border border-[#E1E9EC] rounded-lg px-3 py-1.5 transition cursor-pointer"
                     title="Download PDF Report"
                   >
                     <Download size={13} />
-                    <span className="hidden sm:inline">PDF</span>
+                    <span className="d-none d-sm-inline">PDF</span>
                   </button>
                   {isExpanded ? <ChevronUp size={18} className="text-[#94A1AB]" /> : <ChevronDown size={18} className="text-[#94A1AB]" />}
                 </div>
@@ -203,10 +209,10 @@ export default function ReportsPage() {
               {isExpanded && (
                 <div className="border-t border-[#E1E9EC] p-6 space-y-5 bg-[#FAFCFD]">
                   {/* AI Result */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="row g-4">
                     {report.image_url && (
-                      <div>
-                        <p className="text-xs font-semibold text-[#657685] mb-2 flex items-center gap-1.5">
+                      <div className="col-12 col-sm-6">
+                        <p className="text-xs font-semibold text-[#657685] mb-2 d-flex align-items-center gap-2">
                           <Eye size={12} /> Fundus Image
                         </p>
                         <img
@@ -216,7 +222,7 @@ export default function ReportsPage() {
                         />
                       </div>
                     )}
-                    <div className="space-y-3">
+                    <div className={`space-y-3 ${report.image_url ? 'col-12 col-sm-6' : 'col-12'}`}>
                       <div className="bg-white border border-[#E1E9EC] rounded-xl p-4">
                         <p className="text-xs font-bold text-[#657685] mb-1">AI Result</p>
                         <p className={`font-bold text-sm ${GRADE_COLORS[report.grade]?.split(" ")[2] ?? ""}`}>{report.grade_label}</p>
@@ -227,7 +233,7 @@ export default function ReportsPage() {
                           <p className="text-xs font-bold text-[#1F2F42] mb-2">AI Findings</p>
                           <ul className="space-y-1">
                             {report.findings.map((f, i) => (
-                              <li key={i} className="text-xs text-[#657685] flex items-start gap-1.5">
+                              <li key={i} className="text-xs text-[#657685] d-flex align-items-start gap-2">
                                 <span className="text-[#22AEB0] font-bold">•</span> {f}
                               </li>
                             ))}

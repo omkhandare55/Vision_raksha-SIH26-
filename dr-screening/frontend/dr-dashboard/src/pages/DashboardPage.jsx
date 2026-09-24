@@ -76,148 +76,164 @@ export default function DashboardPage() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard
-          icon={Users}
-          label="Total Screened"
-          value={stats?.total_screened ?? "—"}
-          sub="All time"
-          color="teal"
-          loading={loading}
-        />
-        <KPICard
-          icon={AlertTriangle}
-          label="Referrals Needed"
-          value={stats?.referral_needed ?? "—"}
-          sub={`${stats?.referral_rate_pct ?? 0}% referral rate`}
-          color="amber"
-          loading={loading}
-        />
-        <KPICard
-          icon={CheckCircle}
-          label="Validated"
-          value={stats?.validated ?? "—"}
-          sub={`${stats?.validation_rate_pct ?? 0}% validation rate`}
-          color="emerald"
-          loading={loading}
-        />
-        <KPICard
-          icon={Activity}
-          label="Avg Confidence"
-          value={stats ? `${stats.avg_confidence}%` : "—"}
-          sub={`~${stats?.avg_processing_ms ?? 0}ms / scan`}
-          color="teal-bright"
-          loading={loading}
-        />
+      <div className="row g-4">
+        <div className="col-6 col-lg-3">
+          <KPICard
+            icon={Users}
+            label="Total Screened"
+            value={stats?.total_screened ?? "—"}
+            sub="All time"
+            color="teal"
+            loading={loading}
+          />
+        </div>
+        <div className="col-6 col-lg-3">
+          <KPICard
+            icon={AlertTriangle}
+            label="Referrals Needed"
+            value={stats?.referral_needed ?? "—"}
+            sub={`${stats?.referral_rate_pct ?? 0}% referral rate`}
+            color="amber"
+            loading={loading}
+          />
+        </div>
+        <div className="col-6 col-lg-3">
+          <KPICard
+            icon={CheckCircle}
+            label="Validated"
+            value={stats?.validated ?? "—"}
+            sub={`${stats?.validation_rate_pct ?? 0}% validation rate`}
+            color="emerald"
+            loading={loading}
+          />
+        </div>
+        <div className="col-6 col-lg-3">
+          <KPICard
+            icon={Activity}
+            label="Avg Confidence"
+            value={stats ? `${stats.avg_confidence}%` : "—"}
+            sub={`~${stats?.avg_processing_ms ?? 0}ms / scan`}
+            color="teal-bright"
+            loading={loading}
+          />
+        </div>
       </div>
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="row g-4">
 
         {/* Grade distribution bar */}
-        <div className="lg:col-span-2 card-static p-5">
-          <p className="text-sm font-bold text-[#1F2F42] mb-4">Grade Distribution</p>
-          {loading ? <ChartSkeleton /> :
-           gradeBar.every(d => d.value === 0)
-            ? <EmptyChart message="No screenings yet" />
-            : (
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart data={gradeBar} barSize={40}>
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#657685' }} />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#657685' }} />
-                  <Tooltip
-                    formatter={(val) => [val, "Patients"]}
-                    contentStyle={{ borderRadius: 12, fontSize: 12, border: '1px solid #E1E9EC' }}
-                  />
-                  <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                    {gradeBar.map(entry => (
-                      <Cell key={entry.name} fill={GRADE_COLORS[entry.name] ?? "#76D6D2"} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            )
-          }
+        <div className="col-12 col-lg-8">
+          <div className="card-static p-5 h-100">
+            <p className="text-sm font-bold text-[#1F2F42] mb-4">Grade Distribution</p>
+            {loading ? <ChartSkeleton /> :
+             gradeBar.every(d => d.value === 0)
+              ? <EmptyChart message="No screenings yet" />
+              : (
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={gradeBar} barSize={40}>
+                    <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#657685' }} />
+                    <YAxis allowDecimals={false} tick={{ fontSize: 11, fill: '#657685' }} />
+                    <Tooltip
+                      formatter={(val) => [val, "Patients"]}
+                      contentStyle={{ borderRadius: 12, fontSize: 12, border: '1px solid #E1E9EC' }}
+                    />
+                    <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+                      {gradeBar.map(entry => (
+                        <Cell key={entry.name} fill={GRADE_COLORS[entry.name] ?? "#76D6D2"} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              )
+            }
+          </div>
         </div>
 
         {/* Pie chart */}
-        <div className="card-static p-5">
-          <p className="text-sm font-bold text-[#1F2F42] mb-4">Severity Breakdown</p>
-          {loading ? <ChartSkeleton /> :
-           gradePie.length === 0
-            ? <EmptyChart message="No data yet" />
-            : (
-              <ResponsiveContainer width="100%" height={200}>
-                <PieChart>
-                  <Pie
-                    data={gradePie}
-                    dataKey="value"
-                    nameKey="name"
-                    cx="50%" cy="50%"
-                    outerRadius={70}
-                    label={({ name, percent }) =>
-                      `${name.replace(" DR","")}: ${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
-                    fontSize={9}
-                  >
-                    {gradePie.map(entry => (
-                      <Cell key={entry.name} fill={GRADE_COLORS[entry.name] ?? "#76D6D2"} />
-                    ))}
-                  </Pie>
-                  <Tooltip contentStyle={{ borderRadius: 12, fontSize: 12, border: '1px solid #E1E9EC' }} />
-                </PieChart>
-              </ResponsiveContainer>
-            )
-          }
+        <div className="col-12 col-lg-4">
+          <div className="card-static p-5 h-100">
+            <p className="text-sm font-bold text-[#1F2F42] mb-4">Severity Breakdown</p>
+            {loading ? <ChartSkeleton /> :
+             gradePie.length === 0
+              ? <EmptyChart message="No data yet" />
+              : (
+                <ResponsiveContainer width="100%" height={200}>
+                  <PieChart>
+                    <Pie
+                      data={gradePie}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%" cy="50%"
+                      outerRadius={70}
+                      label={({ name, percent }) =>
+                        `${name.replace(" DR","")}: ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                      fontSize={9}
+                    >
+                      {gradePie.map(entry => (
+                        <Cell key={entry.name} fill={GRADE_COLORS[entry.name] ?? "#76D6D2"} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: 12, fontSize: 12, border: '1px solid #E1E9EC' }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              )
+            }
+          </div>
         </div>
       </div>
 
       {/* System status row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="row g-4">
 
         {/* Model status */}
-        <div className="card-static p-5">
-          <p className="text-sm font-bold text-[#1F2F42] mb-3">System Status</p>
-          <div className="space-y-2.5">
-            {[
-              { label: "AI Model",       status: "ok", note: "EfficientNet-B5 Active" },
-              { label: "Grad-CAM",       status: "ok", note: "Aperture Masked (conv_head)" },
-              { label: "Quality Gate",   status: "ok", note: "Laplacian & Photometric Gate" },
-              { label: "Database",       status: "ok", note: "SQLite / PACS Synced" },
-              { label: "PDF Reports",    status: "ok", note: "ReportLab + HL7 FHIR LOINC" },
-            ].map(({ label, status, note }) => (
-              <div key={label} className="flex items-center justify-between text-sm">
-                <span className="text-[#263746] font-medium">{label}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#94A1AB] font-mono">{note}</span>
-                  <span className={`w-2.5 h-2.5 rounded-full ${
-                    status === "ok" ? "bg-[#22AEB0]" :
-                    status === "demo" ? "bg-[#38C4C4]" : "bg-rose-500"
-                  }`} />
+        <div className="col-12 col-md-6">
+          <div className="card-static p-5 h-100">
+            <p className="text-sm font-bold text-[#1F2F42] mb-3">System Status</p>
+            <div className="space-y-2.5">
+              {[
+                { label: "AI Model",       status: "ok", note: "EfficientNet-B5 Active" },
+                { label: "Grad-CAM",       status: "ok", note: "Aperture Masked (conv_head)" },
+                { label: "Quality Gate",   status: "ok", note: "Laplacian & Photometric Gate" },
+                { label: "Database",       status: "ok", note: "SQLite / PACS Synced" },
+                { label: "PDF Reports",    status: "ok", note: "ReportLab + HL7 FHIR LOINC" },
+              ].map(({ label, status, note }) => (
+                <div key={label} className="flex items-center justify-between text-sm">
+                  <span className="text-[#263746] font-medium">{label}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[#94A1AB] font-mono">{note}</span>
+                    <span className={`w-2.5 h-2.5 rounded-full ${
+                      status === "ok" ? "bg-[#22AEB0]" :
+                      status === "demo" ? "bg-[#38C4C4]" : "bg-rose-500"
+                    }`} />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Quick stats / SIH info */}
-        <div className="relative bg-cover bg-center rounded-2xl p-6 text-white shadow-card overflow-hidden" style={{ backgroundImage: 'url(/ai_dashboard.jpg)' }}>
-          <div className="absolute inset-0 bg-[#1F2F42]/85 z-0" />
-          <div className="relative z-10">
-            <p className="text-xs font-semibold mb-2 text-[#76D6D2] uppercase tracking-wider">SIH 2026 · SIH26038</p>
-            <p className="font-bold text-lg leading-tight mb-3 text-white">
-              Explainable AI for Diabetic Retinopathy Screening
-            </p>
-            <div className="space-y-1.5 text-xs">
-              {[
-                "Organisation: MathWorks",
-                "Category: MedTech / AI",
-                "Model: EfficientNet-B5 Ordinal Regressor",
-                "Dataset: Multi-Center (APTOS 2019 + IDRiD)",
-                "Target: Sensitivity >90%, Specificity >85%",
-              ].map(line => (
-                <p key={line} className="text-[#94A1AB] text-xs font-medium">{line}</p>
-              ))}
+        <div className="col-12 col-md-6">
+          <div className="relative bg-cover bg-center rounded-2xl p-6 text-white shadow-card overflow-hidden h-100" style={{ backgroundImage: 'url(/ai_dashboard.jpg)' }}>
+            <div className="absolute inset-0 bg-[#1F2F42]/85 z-0" />
+            <div className="relative z-10">
+              <p className="text-xs font-semibold mb-2 text-[#76D6D2] uppercase tracking-wider">SIH 2026 · SIH26038</p>
+              <p className="font-bold text-lg leading-tight mb-3 text-white">
+                Explainable AI for Diabetic Retinopathy Screening
+              </p>
+              <div className="space-y-1.5 text-xs">
+                {[
+                  "Organisation: MathWorks",
+                  "Category: MedTech / AI",
+                  "Model: EfficientNet-B5 Ordinal Regressor",
+                  "Dataset: Multi-Center (APTOS 2019 + IDRiD)",
+                  "Target: Sensitivity >90%, Specificity >85%",
+                ].map(line => (
+                  <p key={line} className="text-[#94A1AB] text-xs font-medium">{line}</p>
+                ))}
+              </div>
             </div>
           </div>
         </div>

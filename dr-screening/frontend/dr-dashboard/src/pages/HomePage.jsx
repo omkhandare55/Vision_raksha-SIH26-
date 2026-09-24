@@ -54,10 +54,10 @@ function HeroSection() {
       <div className="absolute bottom-10 left-10 w-96 h-96 bg-[#38C4C4]/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="row g-4 g-lg-5 align-items-center">
 
           {/* Left Content */}
-          <div className="space-y-6">
+          <div className="col-12 col-lg-6 space-y-6">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white rounded-full px-4 py-2 border border-[#E1E9EC] shadow-soft">
               <span className="w-2 h-2 bg-[#22AEB0] rounded-full animate-pulse-soft"></span>
@@ -91,7 +91,7 @@ function HeroSection() {
           </div>
 
           {/* Right: AI Dashboard Mockup */}
-          <div className="relative animate-float">
+          <div className="col-12 col-lg-6 relative animate-float">
             <div className="bg-white rounded-3xl shadow-card-hover border border-[#E1E9EC] p-6 space-y-4">
               {/* Top bar */}
               <div className="flex items-center justify-between">
@@ -104,14 +104,18 @@ function HeroSection() {
               </div>
 
               {/* Mock Images */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="rounded-xl overflow-hidden bg-[#0A1628] aspect-square flex items-center justify-center relative">
-                  <img src="/fundus.jpg" alt="Retinal Fundus" className="w-full h-full object-cover" />
-                  <p className="absolute bottom-2 text-[9px] bg-black/50 px-2 py-0.5 rounded-full text-white font-medium">Retinal Fundus</p>
+              <div className="row g-3">
+                <div className="col-6">
+                  <div className="rounded-xl overflow-hidden bg-[#0A1628] aspect-square flex items-center justify-center relative">
+                    <img src="/fundus.jpg" alt="Retinal Fundus" className="img-fluid w-full h-full object-cover" />
+                    <p className="absolute bottom-2 text-[9px] bg-black/50 px-2 py-0.5 rounded-full text-white font-medium">Retinal Fundus</p>
+                  </div>
                 </div>
-                <div className="rounded-xl overflow-hidden bg-[#0A1628] aspect-square flex items-center justify-center relative">
-                  <img src="/heatmap.jpg" alt="Grad-CAM Heatmap" className="w-full h-full object-cover" />
-                  <p className="absolute bottom-2 text-[9px] bg-black/50 px-2 py-0.5 rounded-full text-white font-medium">Grad-CAM Heatmap</p>
+                <div className="col-6">
+                  <div className="rounded-xl overflow-hidden bg-[#0A1628] aspect-square flex items-center justify-center relative">
+                    <img src="/heatmap.jpg" alt="Grad-CAM Heatmap" className="img-fluid w-full h-full object-cover" />
+                    <p className="absolute bottom-2 text-[9px] bg-black/50 px-2 py-0.5 rounded-full text-white font-medium">Grad-CAM Heatmap</p>
+                  </div>
                 </div>
               </div>
 
@@ -173,14 +177,16 @@ function WhyVisionRaksha() {
           <p className="section-subtitle">Advanced AI. Clear Explanations. Real Impact.</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="row g-4">
           {features.map(({ icon: Icon, title, desc }, i) => (
-            <div key={title} className="card-themed text-center animate-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
-              <div className="icon-circle mx-auto">
-                <Icon size={24} strokeWidth={1.5} />
+            <div key={title} className="col-12 col-sm-6 col-lg-4">
+              <div className="card-themed text-center animate-on-scroll h-100" style={{ transitionDelay: `${i * 80}ms` }}>
+                <div className="icon-circle mx-auto">
+                  <Icon size={24} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-lg font-bold text-[#1F2F42] mb-2">{title}</h3>
+                <p className="text-sm text-[#657685] leading-relaxed mb-0">{desc}</p>
               </div>
-              <h3 className="text-lg font-bold text-[#1F2F42] mb-2">{title}</h3>
-              <p className="text-sm text-[#657685] leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
@@ -261,14 +267,16 @@ function KeyFeaturesSection() {
           <p className="section-subtitle">Complete screening solution with AI, explainability and specialist support.</p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="row g-4">
           {features.map(({ icon: Icon, title, desc }, i) => (
-            <div key={title} className="card-themed animate-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
-              <div className="icon-circle">
-                <Icon size={22} strokeWidth={1.5} />
+            <div key={title} className="col-12 col-sm-6 col-lg-4">
+              <div className="card-themed animate-on-scroll h-100" style={{ transitionDelay: `${i * 80}ms` }}>
+                <div className="icon-circle">
+                  <Icon size={22} strokeWidth={1.5} />
+                </div>
+                <h3 className="text-base font-bold text-[#1F2F42] mb-2">{title}</h3>
+                <p className="text-sm text-[#657685] leading-relaxed mb-0">{desc}</p>
               </div>
-              <h3 className="text-base font-bold text-[#1F2F42] mb-2">{title}</h3>
-              <p className="text-sm text-[#657685] leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
@@ -288,43 +296,49 @@ function AboutSection() {
           <h2 className="section-title">About VisionRaksha</h2>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+        <div className="row g-4 max-w-4xl mx-auto mb-12">
           {/* Mission */}
-          <div className="card-static p-8 animate-on-scroll">
-            <div className="icon-circle">
-              <Star size={22} strokeWidth={1.5} />
+          <div className="col-12 col-md-6">
+            <div className="card-static p-4 p-lg-5 animate-on-scroll h-100">
+              <div className="icon-circle">
+                <Star size={22} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-[#1F2F42] mb-3">Our Mission</h3>
+              <p className="text-sm text-[#657685] leading-relaxed mb-0">
+                To make early Diabetic Retinopathy screening accessible through Explainable AI and doctor-supported healthcare technology.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-[#1F2F42] mb-3">Our Mission</h3>
-            <p className="text-sm text-[#657685] leading-relaxed">
-              To make early Diabetic Retinopathy screening accessible through Explainable AI and doctor-supported healthcare technology.
-            </p>
           </div>
 
           {/* Vision */}
-          <div className="card-static p-8 animate-on-scroll" style={{ transitionDelay: "100ms" }}>
-            <div className="icon-circle">
-              <Eye size={22} strokeWidth={1.5} />
+          <div className="col-12 col-md-6">
+            <div className="card-static p-4 p-lg-5 animate-on-scroll h-100" style={{ transitionDelay: "100ms" }}>
+              <div className="icon-circle">
+                <Eye size={22} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-lg font-bold text-[#1F2F42] mb-3">Our Vision</h3>
+              <p className="text-sm text-[#657685] leading-relaxed mb-0">
+                Prevent avoidable vision loss by bringing intelligent retinal screening closer to every community.
+              </p>
             </div>
-            <h3 className="text-lg font-bold text-[#1F2F42] mb-3">Our Vision</h3>
-            <p className="text-sm text-[#657685] leading-relaxed">
-              Prevent avoidable vision loss by bringing intelligent retinal screening closer to every community.
-            </p>
           </div>
         </div>
 
         {/* Values */}
-        <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
+        <div className="row g-4 max-w-3xl mx-auto">
           {[
             { icon: Heart, title: "Accessibility", desc: "Screening for every community" },
             { icon: Eye,   title: "Explainability", desc: "Transparent AI decisions" },
             { icon: Shield, title: "Trust", desc: "Doctor-validated results" },
           ].map(({ icon: Icon, title, desc }, i) => (
-            <div key={title} className="text-center animate-on-scroll" style={{ transitionDelay: `${i * 80}ms` }}>
-              <div className="w-16 h-16 rounded-2xl bg-[#E8F7F6] border border-[#22AEB0]/15 flex items-center justify-center mx-auto mb-4">
-                <Icon size={24} className="text-[#22AEB0]" strokeWidth={1.5} />
+            <div key={title} className="col-12 col-sm-4">
+              <div className="text-center animate-on-scroll h-100" style={{ transitionDelay: `${i * 80}ms` }}>
+                <div className="w-16 h-16 rounded-2xl bg-[#E8F7F6] border border-[#22AEB0]/15 flex items-center justify-center mx-auto mb-4">
+                  <Icon size={24} className="text-[#22AEB0]" strokeWidth={1.5} />
+                </div>
+                <h4 className="text-base font-bold text-[#1F2F42] mb-1">{title}</h4>
+                <p className="text-sm text-[#657685] mb-0">{desc}</p>
               </div>
-              <h4 className="text-base font-bold text-[#1F2F42] mb-1">{title}</h4>
-              <p className="text-sm text-[#657685]">{desc}</p>
             </div>
           ))}
         </div>
@@ -340,10 +354,10 @@ function FooterSection() {
   return (
     <footer className="bg-[#1F2F42] text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div className="row g-4 g-lg-5 mb-12">
 
           {/* Brand */}
-          <div className="space-y-4">
+          <div className="col-12 col-sm-6 col-lg-3 space-y-4">
             <div className="flex items-center gap-2">
               <Eye size={24} className="text-[#22AEB0]" />
               <span className="text-xl font-bold">Vision<span className="text-[#22AEB0]">Raksha</span></span>
@@ -366,9 +380,9 @@ function FooterSection() {
           </div>
 
           {/* Platform */}
-          <div>
+          <div className="col-12 col-sm-6 col-lg-3">
             <p className="text-xs font-bold text-[#76D6D2] uppercase tracking-wider mb-4">Platform</p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 list-unstyled">
               {["Home", "Features", "How It Works", "Dashboard", "Reports"].map(link => (
                 <li key={link}>
                   <a href="#" className="text-sm text-[#94A1AB] hover:text-white transition">{link}</a>
@@ -378,9 +392,9 @@ function FooterSection() {
           </div>
 
           {/* Resources */}
-          <div>
+          <div className="col-12 col-sm-6 col-lg-3">
             <p className="text-xs font-bold text-[#76D6D2] uppercase tracking-wider mb-4">Resources</p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 list-unstyled">
               {["Documentation", "Research", "Datasets", "Support", "FAQ"].map(link => (
                 <li key={link}>
                   <a href="#" className="text-sm text-[#94A1AB] hover:text-white transition">{link}</a>
@@ -390,9 +404,9 @@ function FooterSection() {
           </div>
 
           {/* Company */}
-          <div>
+          <div className="col-12 col-sm-6 col-lg-3">
             <p className="text-xs font-bold text-[#76D6D2] uppercase tracking-wider mb-4">Company</p>
-            <ul className="space-y-2.5">
+            <ul className="space-y-2.5 list-unstyled">
               {["About Us", "Contact", "Privacy Policy", "Terms of Service"].map(link => (
                 <li key={link}>
                   <a href="#" className="text-sm text-[#94A1AB] hover:text-white transition">{link}</a>
