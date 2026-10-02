@@ -103,12 +103,12 @@ function AuthenticatedApp() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F7FAFB]">
       {/* ── Top Navigation Bar ── */}
-      <nav className="navbar navbar-expand-lg sticky-top z-50 bg-[#1F2F42] shadow-nav px-0">
-        <div className="container-fluid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="d-flex align-items-center justify-content-between w-100 h-16">
+      <nav className="sticky-top z-50 bg-[#1F2F42] shadow-nav">
+        <div className="container-fluid max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="d-flex align-items-center justify-content-between w-100" style={{ minHeight: '4rem' }}>
 
             {/* Left: Logo */}
-            <NavLink to="/dashboard" className="navbar-brand d-flex align-items-center gap-3 flex-shrink-0 cursor-pointer p-0 m-0">
+            <NavLink to="/dashboard" className="d-flex align-items-center gap-2 gap-sm-3 text-decoration-none flex-shrink-0 cursor-pointer py-2">
               <VRLogo size={36} />
               <div className="d-none d-sm-block">
                 <h1 className="text-white fw-bold fs-5 lh-sm tracking-wide mb-0">
@@ -121,35 +121,34 @@ function AuthenticatedApp() {
             </NavLink>
 
             {/* Center: Nav Links (desktop) */}
-            <div className="collapse navbar-collapse d-none d-md-flex justify-content-center">
-              <ul className="navbar-nav gap-2">
+            <div className="d-none d-lg-flex justify-content-center flex-grow-1 mx-3">
+              <div className="d-flex align-items-center gap-1">
                 {navItems.map(({ to, icon: Icon, label }) => (
-                  <li className="nav-item" key={to}>
-                    <NavLink
-                      to={to}
-                      end={to === "/dashboard"}
-                      className={({ isActive }) =>
-                        `nav-link d-flex align-items-center gap-2 px-3 py-2 rounded text-sm fw-medium transition-all duration-200
-                         ${isActive
-                           ? "text-[#22AEB0] bg-white/10 nav-active"
-                           : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
-                      }
-                    >
-                      <Icon size={16} />
-                      {label}
-                    </NavLink>
-                  </li>
+                  <NavLink
+                    key={to}
+                    to={to}
+                    end={to === "/dashboard"}
+                    className={({ isActive }) =>
+                      `d-flex align-items-center gap-2 px-3 py-2 rounded text-sm fw-medium text-decoration-none transition-all duration-200
+                       ${isActive
+                         ? "text-[#22AEB0] bg-white/10 nav-active"
+                         : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
+                    }
+                  >
+                    <Icon size={16} />
+                    {label}
+                  </NavLink>
                 ))}
-              </ul>
+              </div>
             </div>
 
             {/* Right: Status + Profile */}
-            <div className="d-flex align-items-center gap-3">
+            <div className="d-flex align-items-center gap-2 gap-sm-3">
               {online
-                ? <span className="d-none d-sm-flex align-items-center gap-2 text-xs text-emerald-400 fw-medium bg-emerald-400/10 px-3 py-2 rounded">
+                ? <span className="d-none d-md-flex align-items-center gap-2 text-xs text-emerald-400 fw-medium bg-emerald-400/10 px-3 py-2 rounded">
                     <Wifi size={12} /> Online
                   </span>
-                : <span className="d-none d-sm-flex align-items-center gap-2 text-xs text-amber-400 fw-medium bg-amber-400/10 px-3 py-2 rounded">
+                : <span className="d-none d-md-flex align-items-center gap-2 text-xs text-amber-400 fw-medium bg-amber-400/10 px-3 py-2 rounded">
                     <WifiOff size={12} /> Offline
                   </span>
               }
@@ -191,7 +190,7 @@ function AuthenticatedApp() {
               </div>
 
               <button
-                className="btn d-md-none text-[#94A1AB] hover:text-white p-2 border-0 shadow-none"
+                className="btn d-lg-none text-[#94A1AB] hover:text-white p-2 border-0 shadow-none"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 type="button"
               >
@@ -202,26 +201,25 @@ function AuthenticatedApp() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="d-md-none bg-[#26394D] border-top border-white/10 px-3 py-3 w-100">
-            <ul className="navbar-nav gap-2 m-0 p-0">
+          <div className="d-lg-none bg-[#26394D] border-top border-white/10 px-3 py-3 w-100">
+            <div className="d-flex flex-column gap-2">
               {navItems.map(({ to, icon: Icon, label }) => (
-                <li className="nav-item" key={to}>
-                  <NavLink
-                    to={to}
-                    end={to === "/dashboard"}
-                    className={({ isActive }) =>
-                      `nav-link d-flex align-items-center gap-3 px-3 py-2 rounded text-sm fw-medium transition-all
-                       ${isActive
-                         ? "text-[#22AEB0] bg-[#22AEB0]/10"
-                         : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
-                    }
-                  >
-                    <Icon size={18} />
-                    {label}
-                  </NavLink>
-                </li>
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={to === "/dashboard"}
+                  className={({ isActive }) =>
+                    `d-flex align-items-center gap-3 px-3 py-2 rounded text-sm fw-medium text-decoration-none transition-all
+                     ${isActive
+                       ? "text-[#22AEB0] bg-[#22AEB0]/10"
+                       : "text-[#94A1AB] hover:text-white hover:bg-white/5"}`
+                  }
+                >
+                  <Icon size={18} />
+                  {label}
+                </NavLink>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </nav>
@@ -260,10 +258,10 @@ function AuthenticatedApp() {
 /* ── Public Nav Bar (for non-authenticated users) ── */
 function PublicNav() {
   return (
-    <nav className="navbar navbar-expand-md sticky-top z-50 bg-[#1F2F42] shadow-nav px-0 py-2">
+    <nav className="sticky-top z-50 bg-[#1F2F42] shadow-nav">
       <div className="container-fluid max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="d-flex align-items-center justify-content-between w-100 h-16">
-          <div className="d-flex align-items-center gap-3">
+        <div className="d-flex align-items-center justify-content-between w-100 py-2" style={{ minHeight: '4rem' }}>
+          <div className="d-flex align-items-center gap-2 gap-sm-3">
             <VRLogo size={36} />
             <div>
               <h1 className="text-white fw-bold fs-5 lh-sm tracking-wide mb-0">
@@ -275,10 +273,10 @@ function PublicNav() {
             </div>
           </div>
           <div className="d-flex align-items-center gap-3">
-            <div className="collapse navbar-collapse d-none d-md-flex gap-3">
-              <a href="#features" className="nav-link text-sm text-[#94A1AB] hover:text-white transition fw-medium">Features</a>
-              <a href="#workflow" className="nav-link text-sm text-[#94A1AB] hover:text-white transition fw-medium">How It Works</a>
-              <a href="#about" className="nav-link text-sm text-[#94A1AB] hover:text-white transition fw-medium">About</a>
+            <div className="d-none d-md-flex align-items-center gap-3">
+              <a href="#features" className="text-decoration-none text-sm text-[#94A1AB] hover:text-white transition fw-medium">Features</a>
+              <a href="#workflow" className="text-decoration-none text-sm text-[#94A1AB] hover:text-white transition fw-medium">How It Works</a>
+              <a href="#about" className="text-decoration-none text-sm text-[#94A1AB] hover:text-white transition fw-medium">About</a>
             </div>
             <NavLink to="/login" className="btn btn-primary text-xs py-2 px-4 ms-2 rounded">
               Sign In
